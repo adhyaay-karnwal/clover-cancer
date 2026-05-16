@@ -28,6 +28,9 @@ Step-by-step instructions for submitting Clover Cancer to the Gemma 4 Good Hacka
 5. In the **"Attachments"** section under **"Project Links"**:
    - **Code Repository**: `https://github.com/adhyaay-karnwal/clover-cancer`
    - **Live Demo**: `https://github.com/adhyaay-karnwal/clover-cancer` (or HuggingFace Spaces URL if deployed)
+   - **Model Weights**: `https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora`
+   - **Training Data**: `https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data`
+   - **Training Notebook**: `https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning`
 6. In the **"Media Gallery"**:
    - Upload a **cover image** (required) — screenshot of the demo or a project logo
    - Upload the YouTube video link

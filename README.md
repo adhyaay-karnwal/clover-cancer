@@ -68,10 +68,14 @@ echo '{"username":"YOUR_USERNAME","key":"YOUR_API_KEY"}' > ~/.kaggle/kaggle.json
 chmod 600 ~/.kaggle/kaggle.json
 
 # Download LoRA adapters
-kaggle datasets download adhyaaykarnwal/clover-cancer-data -p outputs/ --unzip
+kaggle datasets download adhyaaykarnwal/clover-cancer-lora -p outputs/clover-cancer-lora --unzip
 ```
 
-Or download manually from: [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data)
+Or download manually from: [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora)
+
+### Training Data
+
+The training data is available at: [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data)
 
 ### Run the Demo
 
