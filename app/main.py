@@ -110,11 +110,6 @@ def build_ui():
     """Build the Gradio interface."""
     with gr.Blocks(
         title="Clover Cancer — Pancreatic Cancer Early Detection",
-        theme=gr.themes.Soft(),
-        css="""
-        .risk-high { color: #ef4444; font-weight: bold; }
-        .risk-critical { color: #991b1b; font-weight: bold; }
-        """
     ) as app:
         gr.Markdown("""
         # Clover Cancer

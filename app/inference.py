@@ -4,12 +4,17 @@ Clover Cancer — Inference Module
 Handles loading the fine-tuned Gemma 4 model and running inference
 for pancreatic cancer symptom triage.
 
+Supports two backends:
+- Unsloth (NVIDIA/AMD/Intel GPU) — fast inference with 4-bit quantization
+- Transformers + PEFT (Mac/CPU/MPS) — fallback for Apple Silicon
+
 Author: Adhyaay Karnwal
 """
 
 import json
 import os
 import re
+import sys
 from typing import Optional
 
 # System prompt for the model
@@ -36,6 +41,30 @@ Key guidelines:
 - Include CA 19-9 when PC is suspected"""
 
 
+def _detect_device():
+    """Detect the best available device."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "cuda"
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            return "mps"
+        else:
+            return "cpu"
+    except ImportError:
+        return "cpu"
+
+
+def _has_unsloth():
+    """Check if Unsloth is available."""
+    try:
+        import unsloth
+        import torch
+        return torch.cuda.is_available()
+    except (ImportError, AttributeError):
+        return False
+
+
 class PancreaticCancerTriage:
     """Inference engine for pancreatic cancer triage."""
 
@@ -44,6 +73,7 @@ class PancreaticCancerTriage:
         self.tokenizer = None
         self.model_path = model_path
         self._loaded = False
+        self._device = _detect_device()
 
     def load_model(self, model_path: Optional[str] = None):
         """Load the fine-tuned model with LoRA adapters."""
@@ -51,13 +81,20 @@ class PancreaticCancerTriage:
         if not path:
             raise ValueError("No model path specified")
 
-        print(f"Loading base model and LoRA adapters from {path}...")
+        print(f"Loading model from {path}...")
+        print(f"Device: {self._device}")
 
+        if _has_unsloth():
+            self._load_with_unsloth(path)
+        else:
+            self._load_with_transformers(path)
+
+    def _load_with_unsloth(self, path: str):
+        """Load using Unsloth (NVIDIA/AMD/Intel GPU only)."""
         try:
             from unsloth import FastLanguageModel
             from peft import PeftModel
 
-            # Load base model
             base_model_name = "unsloth/gemma-4-e2b-it"
             self.model, self.tokenizer = FastLanguageModel.from_pretrained(
                 model_name=base_model_name,
@@ -66,35 +103,71 @@ class PancreaticCancerTriage:
                 load_in_4bit=True,
             )
 
-            # Apply LoRA adapters
             self.model = PeftModel.from_pretrained(self.model, path)
-            self.model = self.model.merge_and_unload()  # Merge for faster inference
+            self.model = self.model.merge_and_unload()
 
             self._loaded = True
-            print("Model loaded successfully with LoRA adapters.")
+            print("Model loaded with Unsloth backend.")
 
         except Exception as e:
-            print(f"Error loading model: {e}")
-            print("Falling back to base Gemma 4 model...")
-            self._load_base_model()
+            print(f"Unsloth loading failed: {e}")
+            self._loaded = False
 
-    def _load_base_model(self):
-        """Load base Gemma 4 model as fallback."""
+    def _load_with_transformers(self, path: str):
+        """Load using transformers + PEFT (works on Mac/CPU/MPS)."""
         try:
-            from unsloth import FastLanguageModel
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+            import torch
 
-            self.model, self.tokenizer = FastLanguageModel.from_pretrained(
-                model_name="unsloth/gemma-4-e2b-it",
-                dtype=None,
-                max_seq_length=2048,
-                load_in_4bit=True,
+            # Try loading the LoRA adapter config to find the base model
+            config_path = os.path.join(path, "adapter_config.json")
+            if os.path.exists(config_path):
+                with open(config_path) as f:
+                    adapter_config = json.load(f)
+                base_model_name = adapter_config.get("base_model_name_or_path", "google/gemma-4-e2b-it")
+            else:
+                base_model_name = "google/gemma-4-e2b-it"
+
+            print(f"Base model: {base_model_name}")
+
+            # Determine dtype based on device
+            if self._device == "mps":
+                dtype = torch.float16
+            elif self._device == "cuda":
+                dtype = torch.float16
+            else:
+                dtype = torch.float32
+
+            # Load tokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                path,
+                trust_remote_code=True,
             )
 
+            # Load base model
+            self.model = AutoModelForCausalLM.from_pretrained(
+                base_model_name,
+                dtype=dtype,
+                device_map="auto" if self._device != "mps" else None,
+                trust_remote_code=True,
+                low_cpu_mem_usage=True,
+            )
+
+            if self._device == "mps":
+                self.model = self.model.to("mps")
+
+            # Apply LoRA adapters
+            from peft import PeftModel
+            self.model = PeftModel.from_pretrained(self.model, path)
+            self.model = self.model.merge_and_unload()
+
+            self.model.eval()
             self._loaded = True
-            print("Base model loaded.")
+            print("Model loaded with transformers backend.")
 
         except Exception as e:
-            print(f"Failed to load base model: {e}")
+            print(f"Transformers loading failed: {e}")
+            print("Falling back to mock mode.")
             self._loaded = False
 
     def assess(self, patient_description: str) -> dict:
@@ -109,22 +182,31 @@ class PancreaticCancerTriage:
         ]
 
         try:
+            import torch
+
             inputs = self.tokenizer.apply_chat_template(
                 messages,
                 add_generation_prompt=True,
                 tokenize=True,
                 return_dict=True,
                 return_tensors="pt",
-            ).to(self.model.device)
-
-            outputs = self.model.generate(
-                **inputs,
-                max_new_tokens=1024,
-                temperature=1.0,
-                top_p=0.95,
-                top_k=64,
-                use_cache=True,
             )
+
+            # Move to correct device
+            if self._device == "mps":
+                inputs = {k: v.to("mps") for k, v in inputs.items()}
+            elif self._device == "cuda":
+                inputs = {k: v.to("cuda") for k, v in inputs.items()}
+
+            with torch.no_grad():
+                outputs = self.model.generate(
+                    **inputs,
+                    max_new_tokens=1024,
+                    temperature=1.0,
+                    top_p=0.95,
+                    top_k=64,
+                    use_cache=True,
+                )
 
             # Decode only the new tokens
             response = self.tokenizer.decode(
@@ -141,14 +223,12 @@ class PancreaticCancerTriage:
     def _parse_response(self, response: str) -> dict:
         """Parse model response into structured output."""
         try:
-            # Try to extract JSON
             json_match = re.search(r'\{[\s\S]*\}', response)
             if json_match:
                 return json.loads(json_match.group())
         except json.JSONDecodeError:
             pass
 
-        # If JSON parsing fails, return raw response
         return {
             "raw_response": response,
             "risk_assessment": "unknown",
@@ -159,7 +239,6 @@ class PancreaticCancerTriage:
         """Return a mock assessment for testing without model."""
         desc_lower = description.lower()
 
-        # Simple keyword-based mock
         risk_factors = 0
         if "jaundice" in desc_lower or "yellow" in desc_lower:
             risk_factors += 3
@@ -226,7 +305,6 @@ def format_assessment(assessment: dict) -> str:
 
 
 if __name__ == "__main__":
-    # Quick test
     triage = PancreaticCancerTriage()
     result = triage.assess(
         "I'm a 58-year-old male. I was just diagnosed with diabetes. "
