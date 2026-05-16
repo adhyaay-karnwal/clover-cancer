@@ -3,6 +3,9 @@
 **Pancreatic Cancer Early Detection with Fine-tuned Gemma 4**
 
 [![Kaggle Competition](https://img.shields.io/badge/Kaggle-Gemma%204%20Good%20Hackathon-blue)](https://www.kaggle.com/competitions/gemma-4-good-hackathon)
+[![Training Data](https://img.shields.io/badge/Kaggle-Training%20Dataset-green)](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data)
+[![LoRA Weights](https://img.shields.io/badge/Kaggle-LoRA%20Weights-orange)](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora)
+[![Training Notebook](https://img.shields.io/badge/Kaggle-Training%20Notebook-red)](https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## The Problem
@@ -108,6 +111,14 @@ Structured Output (JSON)
 └── Recommended actions (imaging, tests, referrals)
 ```
 
+## Kaggle Resources
+
+| Resource | Description | Link |
+|----------|-------------|------|
+| **Training Dataset** | 350 structured conversation examples (train/val/test) | [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data) |
+| **LoRA Adapter Weights** | Fine-tuned Gemma 4 E2B weights (119MB) | [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora) |
+| **Training Notebook** | Kaggle T4 GPU training pipeline with Unsloth | [kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning](https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning) |
+
 ## Repository Structure
 
 ```
@@ -165,7 +176,7 @@ To reproduce the training:
 
 ## Author
 
-**Adhyaay Karnwal** — 15-year-old developer, Morris Hills High School
+**Adhyaay Karnwal** — Morris Hills Highschool (Class of 2028)
 
 - GitHub: [@adhyaay-karnwal](https://github.com/adhyaay-karnwal)
 - X: [@AdhyaayK](https://x.com/AdhyaayK)
