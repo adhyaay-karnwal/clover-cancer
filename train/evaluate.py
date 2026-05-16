@@ -14,6 +14,8 @@ Author: Adhyaay Karnwal
 import json
 import os
 import re
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
 from typing import Optional
 
@@ -281,4 +283,6 @@ def compare_models(base_results: list, ft_results: list):
 
 
 if __name__ == "__main__":
-    results = run_evaluation(use_base_model=True)
+    import sys
+    model_path = sys.argv[1] if len(sys.argv) > 1 else None
+    results = run_evaluation(model_path=model_path)
