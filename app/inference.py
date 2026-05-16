@@ -119,16 +119,11 @@ class PancreaticCancerTriage:
             from transformers import AutoModelForCausalLM, AutoTokenizer
             import torch
 
-            # Try loading the LoRA adapter config to find the base model
-            config_path = os.path.join(path, "adapter_config.json")
-            if os.path.exists(config_path):
-                with open(config_path) as f:
-                    adapter_config = json.load(f)
-                base_model_name = adapter_config.get("base_model_name_or_path", "google/gemma-4-e2b-it")
-            else:
-                base_model_name = "google/gemma-4-e2b-it"
+            # Use standard Google model (not Unsloth's quantized version)
+            base_model_name = "google/gemma-4-e2b-it"
 
             print(f"Base model: {base_model_name}")
+            print(f"Device: {self._device}")
 
             # Determine dtype based on device
             if self._device == "mps":
@@ -138,13 +133,14 @@ class PancreaticCancerTriage:
             else:
                 dtype = torch.float32
 
-            # Load tokenizer
+            # Load tokenizer from adapter path (has the right chat template)
             self.tokenizer = AutoTokenizer.from_pretrained(
                 path,
                 trust_remote_code=True,
             )
 
             # Load base model
+            print("Loading base model (this may take a few minutes)...")
             self.model = AutoModelForCausalLM.from_pretrained(
                 base_model_name,
                 dtype=dtype,
@@ -157,6 +153,7 @@ class PancreaticCancerTriage:
                 self.model = self.model.to("mps")
 
             # Apply LoRA adapters
+            print("Applying LoRA adapters...")
             from peft import PeftModel
             self.model = PeftModel.from_pretrained(self.model, path)
             self.model = self.model.merge_and_unload()
