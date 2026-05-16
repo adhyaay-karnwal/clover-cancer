@@ -1,14 +1,11 @@
 """
-Clover Cancer — Gemma 4 Fine-tuning with Unsloth
+Clover Cancer — Gemma 4 Fine-tuning with PyTorch MPS
 
 Fine-tunes Google's Gemma 4 E2B model on the pancreatic cancer triage dataset
-using Unsloth for efficient LoRA training.
-
-Based on Unsloth's official Gemma 4 fine-tuning guide:
-https://unsloth.ai/docs/models/gemma-4/train
+using transformers + PEFT for LoRA training on Apple Silicon.
 
 Hardware: Apple Silicon Mac, 24GB RAM
-Model: Gemma 4 E2B (2B params) — trains on 8GB VRAM with Unsloth
+Model: Gemma 4 E2B (2B params) — fits in 24GB in float16
 
 Author: Adhyaay Karnwal
 """
@@ -18,9 +15,14 @@ import json
 import yaml
 import torch
 from pathlib import Path
-
-# Set environment variables for MPS (Apple Silicon)
-os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    TrainingArguments,
+)
+from peft import LoraConfig, get_peft_model
+from trl import SFTTrainer, SFTConfig
+from datasets import Dataset
 
 
 def load_config(config_path: str = "train/config.yaml") -> dict:
@@ -29,119 +31,141 @@ def load_config(config_path: str = "train/config.yaml") -> dict:
         return yaml.safe_load(f)
 
 
-def load_dataset(data_path: str) -> list:
+def load_dataset(data_path: str) -> Dataset:
     """Load training data from JSON file."""
     with open(data_path) as f:
-        return json.load(f)
+        data = json.load(f)
+    return Dataset.from_list(data)
+
+
+def format_conversations(example, tokenizer):
+    """Format a conversation example for the model."""
+    messages = example["conversations"]
+
+    # Apply chat template
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=False,
+    )
+
+    return {"text": text}
+
+
+def unwrap_clippable_linear(model):
+    """Replace Gemma4ClippableLinear wrappers with their inner Linear modules.
+
+    PEFT doesn't recognize Gemma4ClippableLinear as a valid target.
+    This unwraps them so LoRA can be applied to the inner Linear layers.
+    """
+    replaced = 0
+    for name, module in model.named_modules():
+        if hasattr(module, 'linear') and not isinstance(module, torch.nn.Linear):
+            parts = name.split('.')
+            parent = model
+            for p in parts[:-1]:
+                parent = getattr(parent, p)
+            setattr(parent, parts[-1], module.linear)
+            replaced += 1
+    print(f"  Unwrapped {replaced} Gemma4ClippableLinear modules")
+    return model
 
 
 def setup_model(config: dict):
-    """Load Gemma 4 model with Unsloth and configure LoRA."""
-    from unsloth import FastModel
-    from unsloth.chat_templates import get_chat_template
+    """Load Gemma 4 model in float16 and configure LoRA."""
+    model_name = config["model"]["name"]
+    print(f"Loading model: {model_name}...")
+    print(f"Device: MPS (Apple Silicon)")
 
-    print(f"Loading model: {config['model']['name']}...")
-
-    model, tokenizer = FastModel.from_pretrained(
-        model_name=config["model"]["name"],
-        dtype=None,  # Auto-detect
-        max_seq_length=config["model"]["max_seq_length"],
-        load_in_4bit=config["model"]["load_in_4bit"],
-        full_finetuning=False,
+    # Load tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name,
+        trust_remote_code=True,
+        padding_side="right",
     )
 
-    # Set up chat template for Gemma 4
-    tokenizer = get_chat_template(
-        tokenizer,
-        chat_template="gemma-4",  # Non-thinking mode for E2B
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    # Load model in float16 (no quantization — MPS doesn't support bitsandbytes)
+    # E2B is ~4GB in float16, fits easily in 24GB unified memory
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        trust_remote_code=True,
+        torch_dtype=torch.float16,
+        device_map="mps",
     )
+
+    # Unwrap Gemma4ClippableLinear for PEFT compatibility
+    model = unwrap_clippable_linear(model)
+
+    # Enable gradient checkpointing to save memory
+    model.gradient_checkpointing_enable()
 
     # Configure LoRA
     print("Configuring LoRA adapters...")
-    model = FastModel.get_peft_model(
-        model,
-        finetune_vision_layers=False,  # Text-only
-        finetune_language_layers=True,
-        finetune_attention_modules=True,
-        finetune_mlp_modules=True,
-
+    lora_config = LoraConfig(
         r=config["lora"]["r"],
         lora_alpha=config["lora"]["lora_alpha"],
         lora_dropout=config["lora"]["lora_dropout"],
         bias=config["lora"]["bias"],
-        random_state=3407,
+        target_modules=config["lora"]["target_modules"],
+        task_type="CAUSAL_LM",
     )
+
+    model = get_peft_model(model, lora_config)
+    model.print_trainable_parameters()
 
     return model, tokenizer
 
 
-def prepare_dataset(tokenizer, data_path: str):
-    """Format dataset for Unsloth SFT training."""
-    from unsloth.chat_templates import standardize_data_formats
-
+def prepare_dataset(tokenizer, data_path: str) -> Dataset:
+    """Format dataset for SFT training."""
     print(f"Loading dataset from {data_path}...")
-    data = load_dataset(data_path)
+    dataset = load_dataset(data_path)
 
-    # Convert to standard format
-    dataset = standardize_data_formats({"conversations": data})
+    # Format conversations
+    def format_fn(example):
+        return format_conversations(example, tokenizer)
 
-    # Apply chat template
-    def formatting_prompts_func(examples):
-        convos = examples["conversations"]
-        texts = []
-        for convo in convos:
-            text = tokenizer.apply_chat_template(
-                convo,
-                tokenize=False,
-                add_generation_prompt=False
-            ).removeprefix('<bos>')
-            texts.append(text)
-        return {"text": texts}
-
-    formatted_dataset = dataset.map(formatting_prompts_func, batched=True)
+    formatted_dataset = dataset.map(format_fn, remove_columns=dataset.column_names)
     print(f"Prepared {len(formatted_dataset)} training examples")
 
     return formatted_dataset
 
 
-def create_trainer(model, tokenizer, dataset, config: dict):
+def create_trainer(model, tokenizer, train_dataset, val_dataset, config: dict):
     """Create SFT trainer with configured parameters."""
-    from trl import SFTTrainer, SFTConfig
-    from unsloth.chat_templates import train_on_responses_only
-
     training_config = config["training"]
+
+    training_args = SFTConfig(
+        output_dir=training_config["output_dir"],
+        num_train_epochs=training_config["num_train_epochs"],
+        per_device_train_batch_size=training_config["per_device_train_batch_size"],
+        gradient_accumulation_steps=training_config["gradient_accumulation_steps"],
+        learning_rate=training_config["learning_rate"],
+        warmup_ratio=training_config["warmup_ratio"],
+        lr_scheduler_type=training_config["lr_scheduler_type"],
+        logging_steps=training_config["logging_steps"],
+        save_strategy=training_config["save_strategy"],
+        eval_strategy=training_config["eval_strategy"],
+        optim=training_config["optim"],
+        max_grad_norm=training_config["max_grad_norm"],
+        seed=training_config["seed"],
+        bf16=False,
+        fp16=True,  # Use float16 for MPS
+        report_to="none",
+        max_length=config["model"]["max_seq_length"],
+        dataset_text_field="text",
+        remove_unused_columns=False,
+    )
 
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tokenizer,
-        train_dataset=dataset,
-        eval_dataset=None,  # Can add validation later
-        args=SFTConfig(
-            dataset_text_field="text",
-            per_device_train_batch_size=training_config["per_device_train_batch_size"],
-            gradient_accumulation_steps=training_config["gradient_accumulation_steps"],
-            warmup_ratio=training_config["warmup_ratio"],
-            num_train_epochs=training_config["num_train_epochs"],
-            learning_rate=training_config["learning_rate"],
-            logging_steps=training_config["logging_steps"],
-            save_strategy=training_config["save_strategy"],
-            optim=training_config["optim"],
-            weight_decay=0.001,
-            lr_scheduler_type=training_config["lr_scheduler_type"],
-            seed=training_config["seed"],
-            max_grad_norm=training_config["max_grad_norm"],
-            output_dir=training_config["output_dir"],
-            report_to="none",  # No wandb/logging
-            bf16=training_config["bf16"],
-            fp16=training_config["fp16"],
-        ),
-    )
-
-    # Train on assistant responses only (not system/user prompts)
-    trainer = train_on_responses_only(
-        trainer,
-        instruction_part="<|turn|>user\n",
-        response_part="<|turn|>model\n",
+        processing_class=tokenizer,
+        train_dataset=train_dataset,
+        eval_dataset=val_dataset,
+        args=training_args,
     )
 
     return trainer
@@ -149,17 +173,22 @@ def create_trainer(model, tokenizer, dataset, config: dict):
 
 def train(trainer):
     """Run training and return stats."""
-    print("\n=== Starting Training ===")
+    print("\n" + "=" * 60)
+    print("Starting Training")
+    print("=" * 60)
     print(f"  Batch size: {trainer.args.per_device_train_batch_size}")
     print(f"  Gradient accumulation: {trainer.args.gradient_accumulation_steps}")
     print(f"  Effective batch: {trainer.args.per_device_train_batch_size * trainer.args.gradient_accumulation_steps}")
     print(f"  Learning rate: {trainer.args.learning_rate}")
     print(f"  Epochs: {trainer.args.num_train_epochs}")
+    print(f"  Device: MPS (Apple Silicon)")
     print()
 
     stats = trainer.train()
 
-    print("\n=== Training Complete ===")
+    print("\n" + "=" * 60)
+    print("Training Complete")
+    print("=" * 60)
     print(f"  Total steps: {stats.global_step}")
     print(f"  Training loss: {stats.training_loss:.4f}")
 
@@ -171,30 +200,19 @@ def save_model(model, tokenizer, config: dict):
     output_dir = config["training"]["output_dir"]
 
     print(f"\nSaving model to {output_dir}...")
-    model.save_pretrained(output_dir)
-    tokenizer.save_pretrained(output_dir)
-    print("Model saved successfully.")
-
-    # Optionally push to HuggingFace Hub
-    if config["output"].get("push_to_hub"):
-        hub_model_id = config["output"]["hub_model_id"]
-        print(f"Pushing to HuggingFace Hub: {hub_model_id}...")
-        model.push_to_hub(hub_model_id)
-        tokenizer.push_to_hub(hub_model_id)
-        print("Pushed to Hub successfully.")
-
-
-def export_gguf(model, tokenizer, output_dir: str = "models/gguf"):
-    """Export model to GGUF format for Ollama/llama.cpp deployment."""
-    print(f"\nExporting to GGUF format at {output_dir}...")
     os.makedirs(output_dir, exist_ok=True)
 
-    model.save_pretrained_gguf(
-        output_dir,
-        tokenizer,
-        quantization_method="q4_k_m"
-    )
-    print(f"GGUF model saved to {output_dir}")
+    # Save LoRA adapters
+    model.save_pretrained(output_dir)
+    tokenizer.save_pretrained(output_dir)
+
+    # Save training config
+    with open(os.path.join(output_dir, "training_config.yaml"), "w") as f:
+        yaml.dump(config, f)
+
+    print("Model saved successfully.")
+    print(f"  LoRA adapters: {output_dir}/adapter_model.safetensors")
+    print(f"  Tokenizer: {output_dir}/tokenizer.json")
 
 
 def main():
@@ -205,14 +223,10 @@ def main():
 
     # Check device
     if torch.backends.mps.is_available():
-        device = "mps"
         print(f"Device: Apple Silicon (MPS)")
-    elif torch.cuda.is_available():
-        device = "cuda"
-        print(f"Device: CUDA ({torch.cuda.get_device_name()})")
+        print(f"PyTorch: {torch.__version__}")
     else:
-        device = "cpu"
-        print(f"Device: CPU (training will be slow)")
+        print("WARNING: MPS not available, using CPU (will be slow)")
 
     # Load config
     config = load_config()
@@ -222,11 +236,12 @@ def main():
     # Setup model
     model, tokenizer = setup_model(config)
 
-    # Prepare dataset
-    dataset = prepare_dataset(tokenizer, config["data"]["train_file"])
+    # Prepare datasets
+    train_dataset = prepare_dataset(tokenizer, config["data"]["train_file"])
+    val_dataset = prepare_dataset(tokenizer, config["data"]["val_file"])
 
     # Create trainer
-    trainer = create_trainer(model, tokenizer, dataset, config)
+    trainer = create_trainer(model, tokenizer, train_dataset, val_dataset, config)
 
     # Train
     stats = train(trainer)
@@ -234,15 +249,13 @@ def main():
     # Save
     save_model(model, tokenizer, config)
 
-    # Export GGUF for deployment
-    try:
-        export_gguf(model, tokenizer)
-    except Exception as e:
-        print(f"GGUF export failed (non-critical): {e}")
-
     print("\n" + "=" * 60)
     print("Training pipeline complete!")
     print("=" * 60)
+    print("\nNext steps:")
+    print("  1. Evaluate the model: python train/evaluate.py")
+    print("  2. Run the demo: python app/main.py")
+    print("  3. Export to GGUF for Ollama deployment")
 
 
 if __name__ == "__main__":
