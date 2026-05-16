@@ -143,7 +143,7 @@ class PancreaticCancerTriage:
             print("Loading base model (this may take a few minutes)...")
             self.model = AutoModelForCausalLM.from_pretrained(
                 base_model_name,
-                dtype=dtype,
+                torch_dtype=dtype,
                 device_map="auto" if self._device != "mps" else None,
                 trust_remote_code=True,
                 low_cpu_mem_usage=True,
