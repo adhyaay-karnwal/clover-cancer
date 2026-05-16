@@ -45,12 +45,17 @@ The model produces structured JSON output:
 
 ## Evaluation
 
-Test scenarios cover:
-- Classic high-risk patterns (new-onset diabetes + weight loss + back pain)
-- Emergency presentations (painless jaundice)
-- High-risk genetic backgrounds (BRCA2 carriers)
-- Low-risk scenarios (young patients, isolated symptoms)
-- Subtle presentations (mild jaundice, recurrent DVT)
+Tested on 10 clinical scenarios covering classic high-risk patterns, emergency presentations, genetic risk factors, subtle presentations, and low-risk cases.
+
+### Results
+
+| Metric | Score |
+|--------|-------|
+| Pass Rate | 8/10 (80%) |
+| Risk Classification | 0.80 |
+| Urgency Classification | 0.81 |
+| Clinical Term Coverage | 1.00 |
+| Reasoning Depth | 0.68 |
 
 ## Limitations
 

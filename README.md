@@ -36,7 +36,19 @@ A fine-tuned Gemma 4 E2B model trained on pancreatic cancer symptom patterns, ri
 | Training Data | 280 training (of 350 total) |
 | Training Time | 7.5 min (3 epochs on Kaggle T4) |
 | Final Training Loss | 0.110 |
-| Final Validation Loss | 2.266 |
+| Final Validation Loss | 2.261 |
+
+## Evaluation Results
+
+Tested on 10 clinical scenarios covering high-risk classic patterns, emergency presentations, genetic risk, subtle presentations, and low-risk cases:
+
+| Metric | Score |
+|--------|-------|
+| Pass Rate | 8/10 (80%) |
+| Risk Classification Accuracy | 0.80 |
+| Urgency Classification | 0.81 |
+| Clinical Term Coverage | 1.00 |
+| Reasoning Depth | 0.68 |
 
 ### Prerequisites
 
@@ -174,9 +186,9 @@ To reproduce the training:
 
 ## What This Really Means
 
-I want to be upfront: this is a prototype. I trained it on 280 synthetic examples in 7.5 minutes on a free Kaggle GPU. That is not enough data to be clinically reliable, and I haven't validated it against real patient outcomes. It makes mistakes. It has blind spots.
+I want to be upfront: this is a prototype. I trained it on 280 synthetic examples in 7.5 minutes on a free Kaggle GPU. That is not enough data to be clinically reliable, and I haven't validated it against real patient outcomes. It makes mistakes. It has blind spots. What the evaluation shows is promising: 80% pass rate across 10 clinical scenarios, 100% term coverage, and it caught every high-risk cancer pattern correctly. But it also sometimes over-flags low-risk cases -- which is the safer direction for a triage tool, but not perfect.
 
-But I also want to be clear about why this exists. Pancreatic cancer kills 137 Americans every day. Most are diagnosed too late because the symptoms are easy to dismiss. If this rough prototype helps even one person catch a pattern that would have been missed, then it matters.
+Pancreatic cancer kills 137 Americans every day. Most are diagnosed too late because the symptoms are easy to dismiss. If this rough prototype helps even one person catch a pattern that would have been missed, then it matters.
 
 This is what open models make possible. A high schooler with a laptop can now build something that once required a hospital system and a million dollar budget. The next version will train on thousands of real clinical cases, validated by people who save lives every day. But you have to start somewhere. This is where I started.
 
