@@ -100,8 +100,24 @@ def format_conversations(examples):
     """Format conversations for the model's chat template."""
     texts = []
     for convo in examples["conversations"]:
+        # Gemma 4 expects 'model' not 'assistant' as the role
+        # Also merge system message into user message if present
+        messages = []
+        system_content = None
+        for msg in convo:
+            if msg["role"] == "system":
+                system_content = msg["content"]
+            elif msg["role"] == "user":
+                content = msg["content"]
+                if system_content:
+                    content = f"{system_content}\n\n{content}"
+                    system_content = None
+                messages.append({"role": "user", "content": content})
+            elif msg["role"] == "assistant":
+                messages.append({"role": "model", "content": msg["content"]})
+
         text = tokenizer.apply_chat_template(
-            convo,
+            messages,
             tokenize=False,
             add_generation_prompt=False,
         ).removeprefix("<bos>")
@@ -114,7 +130,12 @@ val_dataset = Dataset.from_list(val_data)
 train_dataset = train_dataset.map(format_conversations, batched=True, remove_columns=train_dataset.column_names)
 val_dataset = val_dataset.map(format_conversations, batched=True, remove_columns=val_dataset.column_names)
 
-print(f"Train formatted: {len(train_dataset)} examples")
+# Debug: print a sample to verify format
+print("Sample formatted text (first 500 chars):")
+print(train_dataset[0]["text"][:500])
+print(f"\nContains '<start_of_turn>model\n': {'<start_of_turn>model' in train_dataset[0]['text']}")
+
+print(f"\nTrain formatted: {len(train_dataset)} examples")
 print(f"Val formatted: {len(val_dataset)} examples")
 
 # %% [markdown]
