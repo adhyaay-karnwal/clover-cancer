@@ -8,6 +8,17 @@ A structured dataset for training AI models on pancreatic cancer symptom triage 
 
 This dataset contains structured training examples that map patient presentations (symptoms, demographics, risk factors) to clinical assessments including risk levels, differential diagnoses, urgency classifications, and recommended actions.
 
+### Statistics
+
+| Split | Count |
+|-------|-------|
+| Training | 280 |
+| Validation | 35 |
+| Test | 35 |
+| **Total** | **350** |
+| PC-specific patterns | 152 |
+| General medical examples | 198 |
+
 ## Source Data
 
 - NCCN Clinical Practice Guidelines for Pancreatic Cancer

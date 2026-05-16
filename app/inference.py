@@ -170,12 +170,13 @@ class PancreaticCancerTriage:
     def assess(self, patient_description: str) -> dict:
         """Run triage assessment on a patient description."""
         if not self._loaded:
-            return self._mock_assessment(patient_description)
+            result = self._mock_assessment(patient_description)
+            result["_raw_response"] = json.dumps(result, indent=2)
+            return result
 
-        # Merge system into user for Gemma 4 (no native system role)
-        user_content = f"{SYSTEM_PROMPT}\n\nPlease assess my symptoms and tell me what might be going on:\n\n{patient_description}"
         messages = [
-            {"role": "user", "content": user_content},
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Please assess my symptoms and tell me what might be going on:\n\n{patient_description}"},
         ]
 
         try:
@@ -185,7 +186,6 @@ class PancreaticCancerTriage:
                 messages,
                 add_generation_prompt=True,
                 tokenize=True,
-                return_dict=True,
                 return_tensors="pt",
             )
 
@@ -199,32 +199,51 @@ class PancreaticCancerTriage:
                 outputs = self.model.generate(
                     **inputs,
                     max_new_tokens=1024,
-                    temperature=1.0,
-                    top_p=0.95,
-                    top_k=64,
+                    temperature=0.3,
+                    top_p=0.9,
+                    top_k=40,
                     use_cache=True,
                 )
 
             # Decode only the new tokens
-            response = self.tokenizer.decode(
+            raw_response = self.tokenizer.decode(
                 outputs[0][inputs["input_ids"].shape[1]:],
                 skip_special_tokens=True
             )
 
-            return self._parse_response(response)
+            result = self._parse_response(raw_response)
+            result["_raw_response"] = raw_response
+            return result
 
         except Exception as e:
             print(f"Inference error: {e}")
-            return {"error": str(e)}
+            return {"error": str(e), "_raw_response": ""}
 
     def _parse_response(self, response: str) -> dict:
         """Parse model response into structured output."""
-        try:
-            json_match = re.search(r'\{[\s\S]*\}', response)
-            if json_match:
-                return json.loads(json_match.group())
-        except json.JSONDecodeError:
-            pass
+        # Try full response first
+        response = response.strip()
+        if response.startswith("{") and response.endswith("}"):
+            try:
+                return json.loads(response)
+            except json.JSONDecodeError:
+                pass
+
+        # Fall back to regex with balanced brace matching
+        brace_depth = 0
+        start = -1
+        for i, c in enumerate(response):
+            if c == "{":
+                if start == -1:
+                    start = i
+                brace_depth += 1
+            elif c == "}":
+                brace_depth -= 1
+                if brace_depth == 0 and start != -1:
+                    try:
+                        return json.loads(response[start:i+1])
+                    except json.JSONDecodeError:
+                        start = -1
 
         return {
             "raw_response": response,
@@ -243,7 +262,7 @@ class PancreaticCancerTriage:
             risk_factors += 2
         if "diabetes" in desc_lower and "new" in desc_lower:
             risk_factors += 2
-        if "back pain" in desc_lower:
+        if "back" in desc_lower and "pain" in desc_lower:
             risk_factors += 1
         if "brca" in desc_lower:
             risk_factors += 2

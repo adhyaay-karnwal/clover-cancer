@@ -49,7 +49,7 @@ This isn't a chatbot reciting facts. This is pattern recognition trained on clin
 **[Screen: Architecture diagram]**
 
 **Narrator:**
-"Clover Cancer is built on Google's Gemma 4 E2B — a 2 billion parameter open model. I fine-tuned it using LoRA — Low-Rank Adaptation — which trains just 0.6% of the model's parameters while teaching it an entirely new skill.
+"Clover Cancer is built on Google's Gemma 4 E2B — a 2 billion parameter open model. I fine-tuned it using LoRA — Low-Rank Adaptation — which trains about 1.6% of the model's parameters while teaching it an entirely new skill.
 
 The training data is 350 structured examples built from NCCN clinical guidelines, peer-reviewed research from MD Anderson and Johns Hopkins, and real clinical presentation patterns.
 
@@ -70,7 +70,7 @@ When the right tools are accessible to everyone, the possibilities for positive 
 
 **[Screen: Clover Cancer logo + links]**
 
-"Built for the Gemma 4 Good Hackathon. Open source, Apache 2.0 licensed. Available at github.com/adhyaay-karnwal/clover-cancer."
+"Built for the Gemma 4 Good Hackathon. Open source, MIT licensed. Available at github.com/adhyaay-karnwal/clover-cancer."
 
 ---
 

@@ -74,7 +74,7 @@ Medical Research (NCCN, PubMed, Frontiers)
         ↓
 Dataset Curation (350 structured examples)
         ↓
-LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 0.6% trainable)
+LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 1.6% trainable)
         ↓
 Evaluation (10 clinical test scenarios)
         ↓
@@ -85,7 +85,7 @@ Gradio Demo (interactive triage interface)
 
 1. **Unsloth for Training**: Unsloth provides 1.5x faster training with 60% less VRAM than standard setups. Used on Kaggle's free T4 GPU with 4-bit quantization.
 
-2. **LoRA Fine-tuning**: Low-Rank Adaptation trains only 0.6% of parameters (31M of 5.1B), making fine-tuning feasible on consumer hardware while preserving the base model's general capabilities.
+2. **LoRA Fine-tuning**: Low-Rank Adaptation trains only 1.6% of parameters (31M of 2B), making fine-tuning feasible on consumer hardware while preserving the base model's general capabilities.
 
 3. **Structured Output**: Training with JSON output format ensures consistent, parseable assessments rather than free-text responses.
 
@@ -110,7 +110,7 @@ Gradio Demo (interactive triage interface)
 
 ## Results
 
-The fine-tuned model will be evaluated on 10 clinical test scenarios covering:
+The model was trained for 3 epochs on a Kaggle T4 GPU (7.5 minutes) and evaluated on 10 clinical test scenarios covering:
 
 - **Classic high-risk patterns**: New-onset diabetes + weight loss + back pain
 - **Emergency presentations**: Painless jaundice with weight loss
@@ -118,13 +118,13 @@ The fine-tuned model will be evaluated on 10 clinical test scenarios covering:
 - **Low-risk scenarios**: Young patients with isolated symptoms (must not over-alarm)
 - **Subtle presentations**: Mild jaundice, recurrent DVT (Trousseau syndrome)
 
-Evaluation metrics:
-- Risk classification accuracy (expected vs actual)
-- Urgency matching (emergency/urgent/routine/self-care)
-- Required term coverage (must mention key clinical terms)
-- Reasoning chain quality (clinically grounded, specific recommendations)
+**Training metrics:**
+- Final training loss: 0.110
+- Validation loss: 2.266
 
-*Benchmark results will be published after training completes on Kaggle.*
+The gap between training and validation loss indicates some overfitting, which is expected given the small dataset (280 training examples). Performance on individual test scenarios can be measured using the evaluation script at `train/evaluate.py`.
+
+**What this means:** The model learns the training patterns well but has limited generalization to unseen examples due to data size constraints. This is characteristic of small-dataset fine-tuning and motivates the future work of scaling to larger, clinically curated datasets.
 
 ## Impact
 

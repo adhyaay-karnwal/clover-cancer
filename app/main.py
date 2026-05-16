@@ -83,13 +83,17 @@ def assess_patient(symptoms, age, gender, risk_factors_list, duration):
 
     description = " ".join(parts)
 
-    # Run assessment
-    assessment = triage.assess(description)
+    # Run assessment with error handling
+    try:
+        assessment = triage.assess(description)
+    except Exception as e:
+        error_msg = f"Assessment failed: {str(e)}"
+        return error_msg, json.dumps({"error": str(e)}, indent=2), "**Status: Error**"
 
     # Format for display
     formatted = format_assessment(assessment)
 
-    # Determine risk color
+    # Determine risk color and create markdown display
     risk = assessment.get("risk_assessment", "unknown").lower()
     risk_colors = {
         "low": "#22c55e",
@@ -99,11 +103,22 @@ def assess_patient(symptoms, age, gender, risk_factors_list, duration):
         "unknown": "#6b7280"
     }
     color = risk_colors.get(risk, "#6b7280")
+    risk_labels = {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "critical": "Critical",
+        "unknown": "Unknown"
+    }
+    risk_markdown = (
+        f"### Risk Level: <span style='color:{color}'>{risk_labels.get(risk, 'Unknown').upper()}</span>\n\n"
+        f"Urgency: **{assessment.get('urgency', 'unknown').upper()}**"
+    )
 
     # Format JSON for display
-    json_display = json.dumps(assessment, indent=2)
+    json_display = json.dumps(assessment, indent=2, default=str)
 
-    return formatted, json_display, color
+    return formatted, json_display, risk_markdown
 
 
 def build_ui():

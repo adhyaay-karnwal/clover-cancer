@@ -93,8 +93,9 @@ def setup_model(config: dict):
         model_name,
         trust_remote_code=True,
         torch_dtype=torch.float16,
-        device_map="mps",
+        device_map=None,
     )
+    model = model.to("mps")
 
     # Unwrap Gemma4ClippableLinear for PEFT compatibility
     model = unwrap_clippable_linear(model)
@@ -138,6 +139,12 @@ def create_trainer(model, tokenizer, train_dataset, val_dataset, config: dict):
     """Create SFT trainer with configured parameters."""
     training_config = config["training"]
 
+    # MPS doesn't support adamw_8bit (bitsandbytes), so override
+    optim = training_config["optim"]
+    if optim == "adamw_8bit":
+        optim = "adamw_torch"
+        print(f"  MPS: overrode optimizer from adamw_8bit to {optim}")
+
     training_args = SFTConfig(
         output_dir=training_config["output_dir"],
         num_train_epochs=training_config["num_train_epochs"],
@@ -149,11 +156,11 @@ def create_trainer(model, tokenizer, train_dataset, val_dataset, config: dict):
         logging_steps=training_config["logging_steps"],
         save_strategy=training_config["save_strategy"],
         eval_strategy=training_config["eval_strategy"],
-        optim=training_config["optim"],
+        optim=optim,
         max_grad_norm=training_config["max_grad_norm"],
         seed=training_config["seed"],
         bf16=False,
-        fp16=True,  # Use float16 for MPS
+        fp16=True,
         report_to="none",
         max_length=config["model"]["max_seq_length"],
         dataset_text_field="text",
@@ -162,7 +169,7 @@ def create_trainer(model, tokenizer, train_dataset, val_dataset, config: dict):
 
     trainer = SFTTrainer(
         model=model,
-        processing_class=tokenizer,
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         args=training_args,

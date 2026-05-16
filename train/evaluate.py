@@ -152,15 +152,18 @@ def evaluate_response(response: str, scenario: dict) -> dict:
             result["issues"].append(f"Urgency: expected '{scenario['expected_urgency']}', got '{actual_urgency}'")
             result["passed"] = False
 
-        # Check reasoning quality
+        # Check reasoning quality (based on clinical reasoning depth, not length)
         reasoning = extracted.get("reasoning_chain", "")
-        if len(reasoning) > 50:
+        clinical_indicators = ["risk", "symptom", "age", "imaging", "suggest", "indicate",
+                               "recommend", "diagnosis", "presentation", "guideline", "evidence"]
+        indicator_count = sum(1 for word in clinical_indicators if re.search(r'\b' + word + r'\b', reasoning.lower()))
+        if indicator_count >= 4:
             result["scores"]["reasoning_quality"] = 1.0
-        elif len(reasoning) > 20:
+        elif indicator_count >= 2:
             result["scores"]["reasoning_quality"] = 0.5
         else:
             result["scores"]["reasoning_quality"] = 0.0
-            result["issues"].append("Reasoning too short or missing")
+            result["issues"].append("Reasoning lacks clinical depth")
     else:
         result["scores"]["risk_accuracy"] = 0.0
         result["scores"]["urgency_accuracy"] = 0.0
@@ -168,10 +171,11 @@ def evaluate_response(response: str, scenario: dict) -> dict:
         result["issues"].append("Could not extract JSON from response")
         result["passed"] = False
 
-    # Check must-mention terms
+    # Check must-mention terms with word boundary matching
     must_mention_score = 0
     for term in scenario.get("must_mention", []):
-        if term.lower() in response_lower:
+        pattern = re.compile(r'\b' + re.escape(term.lower()) + r'\b')
+        if pattern.search(response_lower):
             must_mention_score += 1
         else:
             result["issues"].append(f"Missing required term: '{term}'")
@@ -183,9 +187,10 @@ def evaluate_response(response: str, scenario: dict) -> dict:
     else:
         result["scores"]["must_mention"] = 1.0
 
-    # Check should-not-mention terms
+    # Check should-not-mention terms with word boundary matching
     for term in scenario.get("should_not_mention", []):
-        if term.lower() in response_lower:
+        pattern = re.compile(r'\b' + re.escape(term.lower()) + r'\b')
+        if pattern.search(response_lower):
             result["issues"].append(f"Should not mention: '{term}'")
             result["scores"]["appropriateness"] = result.get("scores", {}).get("appropriateness", 1.0) * 0.5
 
@@ -197,7 +202,7 @@ def evaluate_response(response: str, scenario: dict) -> dict:
     return result
 
 
-def run_evaluation(model_path: Optional[str] = None, use_base_model: bool = False):
+def run_evaluation(model_path: Optional[str] = None, use_base_model: bool = False, temperature: float = 0.3):
     """Run evaluation on test scenarios."""
     print("=" * 60)
     print("Clover Cancer — Model Evaluation")
@@ -205,14 +210,17 @@ def run_evaluation(model_path: Optional[str] = None, use_base_model: bool = Fals
 
     if use_base_model:
         print("Evaluating: BASE Gemma 4 model (no fine-tuning)")
+        # Load base model without LoRA adapters by passing None path
+        eval_model_path = None
     else:
         print(f"Evaluating: Fine-tuned model from {model_path}")
+        eval_model_path = model_path
 
     # Load model (fine-tuned or base)
     from app.inference import PancreaticCancerTriage
     triage = PancreaticCancerTriage()
-    if model_path and os.path.exists(model_path):
-        triage.load_model(model_path)
+    if eval_model_path and os.path.exists(eval_model_path):
+        triage.load_model(eval_model_path)
     else:
         print("WARNING: No model path provided or path doesn't exist. Using mock mode.")
         print("  Pass model path as argument: python train/evaluate.py <model_path>")
@@ -224,7 +232,7 @@ def run_evaluation(model_path: Optional[str] = None, use_base_model: bool = Fals
 
         # Run inference
         response_raw = triage.assess(scenario["input"])
-        response_text = str(response_raw)
+        response_text = response_raw.get("_raw_response", str(response_raw))
 
         # Evaluate
         result = evaluate_response(response_text, scenario)
