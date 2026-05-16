@@ -46,31 +46,32 @@ class PancreaticCancerTriage:
         self._loaded = False
 
     def load_model(self, model_path: Optional[str] = None):
-        """Load the fine-tuned model."""
+        """Load the fine-tuned model with LoRA adapters."""
         path = model_path or self.model_path
         if not path:
             raise ValueError("No model path specified")
 
-        print(f"Loading model from {path}...")
+        print(f"Loading base model and LoRA adapters from {path}...")
 
         try:
-            from unsloth import FastModel
-            from unsloth.chat_templates import get_chat_template
+            from unsloth import FastLanguageModel
+            from peft import PeftModel
 
-            self.model, self.tokenizer = FastModel.from_pretrained(
-                model_name=path,
+            # Load base model
+            base_model_name = "unsloth/gemma-4-e2b-it"
+            self.model, self.tokenizer = FastLanguageModel.from_pretrained(
+                model_name=base_model_name,
                 dtype=None,
                 max_seq_length=2048,
                 load_in_4bit=True,
             )
 
-            self.tokenizer = get_chat_template(
-                self.tokenizer,
-                chat_template="gemma-4",
-            )
+            # Apply LoRA adapters
+            self.model = PeftModel.from_pretrained(self.model, path)
+            self.model = self.model.merge_and_unload()  # Merge for faster inference
 
             self._loaded = True
-            print("Model loaded successfully.")
+            print("Model loaded successfully with LoRA adapters.")
 
         except Exception as e:
             print(f"Error loading model: {e}")
@@ -80,19 +81,13 @@ class PancreaticCancerTriage:
     def _load_base_model(self):
         """Load base Gemma 4 model as fallback."""
         try:
-            from unsloth import FastModel
-            from unsloth.chat_templates import get_chat_template
+            from unsloth import FastLanguageModel
 
-            self.model, self.tokenizer = FastModel.from_pretrained(
+            self.model, self.tokenizer = FastLanguageModel.from_pretrained(
                 model_name="unsloth/gemma-4-e2b-it",
                 dtype=None,
                 max_seq_length=2048,
                 load_in_4bit=True,
-            )
-
-            self.tokenizer = get_chat_template(
-                self.tokenizer,
-                chat_template="gemma-4",
             )
 
             self._loaded = True
@@ -107,9 +102,10 @@ class PancreaticCancerTriage:
         if not self._loaded:
             return self._mock_assessment(patient_description)
 
+        # Merge system into user for Gemma 4 (no native system role)
+        user_content = f"{SYSTEM_PROMPT}\n\nPlease assess my symptoms and tell me what might be going on:\n\n{patient_description}"
         messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Please assess my symptoms and tell me what might be going on:\n\n{patient_description}"}
+            {"role": "user", "content": user_content},
         ]
 
         try:

@@ -240,8 +240,8 @@ if __name__ == "__main__":
     print("Clover Cancer — Pancreatic Cancer Triage Demo")
     print("=" * 50)
 
-    # Try to load model
-    model_path = os.environ.get("MODEL_PATH", "outputs")
+    # Try to load model with LoRA adapters
+    model_path = os.environ.get("MODEL_PATH", "outputs/clover-cancer-lora")
     if os.path.exists(model_path):
         triage.load_model(model_path)
     else:
