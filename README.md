@@ -35,8 +35,16 @@ A fine-tuned Gemma 4 E2B model trained on pancreatic cancer symptom patterns, ri
 | Trainable Parameters | 31M (1.6%) |
 | Training Data | 280 training (of 350 total) |
 | Training Time | 7.5 min (3 epochs on Kaggle T4) |
-| Final Training Loss | 0.110 |
+| Final Training Loss | 0.1096 |
 | Final Validation Loss | 2.261 |
+
+Training log by epoch:
+
+| Epoch | Training Loss | Validation Loss |
+|-------|--------------|----------------|
+| 1 | 0.3827 | 2.3884 |
+| 2 | 0.1442 | 2.2614 |
+| 3 | 0.1096 | 2.2610 |
 
 ## Evaluation Results
 

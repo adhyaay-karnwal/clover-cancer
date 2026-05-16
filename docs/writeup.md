@@ -119,8 +119,15 @@ The model was trained for 3 epochs on a Kaggle T4 GPU (7.5 minutes) and evaluate
 - **Subtle presentations**: Mild jaundice, recurrent DVT (Trousseau syndrome)
 
 **Training metrics:**
-- Final training loss: 0.110
-- Validation loss: 2.261
+
+| Epoch | Training Loss | Validation Loss |
+|-------|--------------|----------------|
+| 1 | 0.3827 | 2.3884 |
+| 2 | 0.1442 | 2.2614 |
+| 3 | 0.1096 | 2.2610 |
+
+- Final training loss: 0.1096
+- Final validation loss: 2.261
 
 **Evaluation results (10 test scenarios):**
 | Metric | Score |
