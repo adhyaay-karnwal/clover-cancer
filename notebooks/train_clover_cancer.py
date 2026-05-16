@@ -83,10 +83,10 @@ model = FastLanguageModel.get_peft_model(
 
 # %%
 # Load training data (upload data/processed/train.json to Kaggle)
-with open("/kaggle/input/clover-cancer-data/train.json") as f:
+with open("/kaggle/input/datasets/adhyaaykarnwal/clover-cancer-data/train.json") as f:
     train_data = json.load(f)
 
-with open("/kaggle/input/clover-cancer-data/val.json") as f:
+with open("/kaggle/input/datasets/adhyaaykarnwal/clover-cancer-data/val.json") as f:
     val_data = json.load(f)
 
 print(f"Train: {len(train_data)} examples")
