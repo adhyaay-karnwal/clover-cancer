@@ -133,7 +133,7 @@ val_dataset = val_dataset.map(format_conversations, batched=True, remove_columns
 # Debug: print a sample to verify format
 print("Sample formatted text (first 500 chars):")
 print(train_dataset[0]["text"][:500])
-print(f"\nContains '<start_of_turn>model\n': {'<start_of_turn>model' in train_dataset[0]['text']}")
+print(f"\nContains '<|turn>model': {'<|turn>model' in train_dataset[0]['text']}")
 
 print(f"\nTrain formatted: {len(train_dataset)} examples")
 print(f"Val formatted: {len(val_dataset)} examples")
@@ -170,11 +170,11 @@ trainer = SFTTrainer(
     ),
 )
 
-# Train on assistant responses only
+# Gemma 4 uses <|turn>user and <|turn>model markers
 trainer = train_on_responses_only(
     trainer,
-    instruction_part="<start_of_turn>user\n",
-    response_part="<start_of_turn>model\n",
+    instruction_part="<|turn>user\n",
+    response_part="<|turn>model\n",
 )
 
 # %%
