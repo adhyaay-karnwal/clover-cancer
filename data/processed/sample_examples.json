@@ -1,6 +1,6 @@
 [
   {
-    "messages": [
+    "conversations": [
       {
         "role": "system",
         "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
@@ -16,7 +16,7 @@
     ]
   },
   {
-    "messages": [
+    "conversations": [
       {
         "role": "system",
         "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
@@ -32,7 +32,7 @@
     ]
   },
   {
-    "messages": [
+    "conversations": [
       {
         "role": "system",
         "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
@@ -48,7 +48,7 @@
     ]
   },
   {
-    "messages": [
+    "conversations": [
       {
         "role": "system",
         "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
@@ -64,7 +64,7 @@
     ]
   },
   {
-    "messages": [
+    "conversations": [
       {
         "role": "system",
         "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."

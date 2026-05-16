@@ -74,7 +74,7 @@ Medical Research (NCCN, PubMed, Frontiers)
         ↓
 Dataset Curation (350 structured examples)
         ↓
-LoRA Fine-tuning (PEFT, rank 16, 0.6% trainable)
+LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 0.6% trainable)
         ↓
 Evaluation (10 clinical test scenarios)
         ↓
@@ -83,9 +83,9 @@ Gradio Demo (interactive triage interface)
 
 ### Key Technical Decisions
 
-1. **Unwrap Gemma4ClippableLinear**: The model uses custom wrapper modules that PEFT doesn't recognize. Solution: unwrap to inner Linear layers before applying LoRA.
+1. **Unsloth for Training**: Unsloth provides 1.5x faster training with 60% less VRAM than standard setups. Used on Kaggle's free T4 GPU with 4-bit quantization.
 
-2. **MPS Training**: Apple Silicon's unified memory is ideal for LLM training. No quantization needed — E2B fits in float16.
+2. **LoRA Fine-tuning**: Low-Rank Adaptation trains only 0.6% of parameters (31M of 5.1B), making fine-tuning feasible on consumer hardware while preserving the base model's general capabilities.
 
 3. **Structured Output**: Training with JSON output format ensures consistent, parseable assessments rather than free-text responses.
 
@@ -110,12 +110,21 @@ Gradio Demo (interactive triage interface)
 
 ## Results
 
-The fine-tuned model demonstrates improved accuracy over the base Gemma 4 model:
+The fine-tuned model will be evaluated on 10 clinical test scenarios covering:
 
-- **Risk assessment accuracy**: Correctly identifies high-risk patterns that the base model misses
-- **Urgency classification**: Appropriate urgency matching (not over-alarming for low-risk)
-- **Reasoning quality**: Clinically grounded explanations with specific diagnostic recommendations
-- **Condition identification**: Correctly ranks pancreatic cancer higher in relevant presentations
+- **Classic high-risk patterns**: New-onset diabetes + weight loss + back pain
+- **Emergency presentations**: Painless jaundice with weight loss
+- **High-risk genetic backgrounds**: BRCA2 carriers with new symptoms
+- **Low-risk scenarios**: Young patients with isolated symptoms (must not over-alarm)
+- **Subtle presentations**: Mild jaundice, recurrent DVT (Trousseau syndrome)
+
+Evaluation metrics:
+- Risk classification accuracy (expected vs actual)
+- Urgency matching (emergency/urgent/routine/self-care)
+- Required term coverage (must mention key clinical terms)
+- Reasoning chain quality (clinically grounded, specific recommendations)
+
+*Benchmark results will be published after training completes on Kaggle.*
 
 ## Impact
 

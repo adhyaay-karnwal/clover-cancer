@@ -232,12 +232,6 @@ def build_ui():
             outputs=[assessment_text, json_output, risk_display],
         )
 
-        # Update risk display color
-        def update_risk_display(text, color):
-            return gr.Markdown(
-                value=f"<span style='color:{color}; font-size:1.5em; font-weight:bold;'>{text.split(chr(10))[0]}</span>"
-            )
-
     return app
 
 

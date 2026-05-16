@@ -167,7 +167,7 @@ class PancreaticCancerTriage:
         risk_factors = 0
         if "jaundice" in desc_lower or "yellow" in desc_lower:
             risk_factors += 3
-        if "weight loss" in desc_lower or "lost" in desc_lower and "pound" in desc_lower:
+        if "weight loss" in desc_lower or ("lost" in desc_lower and "pound" in desc_lower):
             risk_factors += 2
         if "diabetes" in desc_lower and "new" in desc_lower:
             risk_factors += 2

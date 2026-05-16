@@ -10,7 +10,7 @@ Pancreatic cancer is the **3rd leading cause of cancer death** in the US, with a
 |-------|----------------|-----------------|
 | Stage IA (localized, ≤2cm) | ~44% | >38 months |
 | Stage IB (localized, >2cm) | ~37% | >30 months |
-| Stage IIA (locally advanced) | ~28% | ~24 months |
+| Stage IIA (locally extensive, no nodes) | ~28% | ~24 months |
 | Stage IIB (regional lymph nodes) | ~15% | ~18 months |
 | Stage III (locally advanced) | ~8% | ~12 months |
 | Stage IV (metastatic) | ~3% | ~6 months |
@@ -31,12 +31,12 @@ Pancreatic cancer is the **3rd leading cause of cancer death** in the US, with a
 
 ### Moderate Risk
 - **Chronic pancreatitis** — 10-20x increased risk
-- **New-onset diabetes (type 2)** — 6-8x increased risk in patients ≥50 with diabetes <3 years (Chari et al., MD Anderson)
+- **New-onset diabetes (type 2)** — ~2x overall risk; specifically 0.625% of NOD patients ≥50 diagnosed with PC within 3 years (Chari et al., MD Anderson)
 - **Long-standing diabetes (>5 years)** — 1.5-2x risk
 - **Hereditary pancreatitis (PRSS1)** — 50-70x increased risk
 
 #### New-Onset Diabetes as Early Marker (2025 Frontiers/PMC Research)
-- ~1 in 160 new-onset diabetes patients ≥50 diagnosed with PC within 3 years
+- ~1 in 160 (0.625%) new-onset diabetes patients ≥50 diagnosed with PC within 3 years (Chari et al.)
 - Most PC diagnoses occur within first year of diabetes onset — suggesting cancer CAUSES diabetes
 - ~50% of PC patients have diabetes at diagnosis; half are new-onset candidates
 - Pancreatic cancer risk increased 50% in T2D diagnosis <4 years vs >5 years

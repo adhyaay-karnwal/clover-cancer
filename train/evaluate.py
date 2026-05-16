@@ -208,20 +208,32 @@ def run_evaluation(model_path: Optional[str] = None, use_base_model: bool = Fals
     else:
         print(f"Evaluating: Fine-tuned model from {model_path}")
 
+    # Load model (fine-tuned or base)
+    from app.inference import PancreaticCancerTriage
+    triage = PancreaticCancerTriage()
+    if model_path and os.path.exists(model_path):
+        triage.load_model(model_path)
+    else:
+        print("WARNING: No model path provided or path doesn't exist. Using mock mode.")
+        print("  Pass model path as argument: python train/evaluate.py <model_path>")
+
     results = []
     for scenario in TEST_SCENARIOS:
         print(f"\n--- {scenario['name']} ---")
         print(f"  {scenario['description']}")
 
-        # In a real run, this would call the model
-        # For now, create a placeholder result
-        result = {
-            "scenario": scenario["name"],
-            "passed": False,
-            "issues": ["Model not loaded — run with actual model"],
-            "scores": {"risk_accuracy": 0, "urgency_accuracy": 0, "reasoning_quality": 0}
-        }
+        # Run inference
+        response_raw = triage.assess(scenario["input"])
+        response_text = str(response_raw)
+
+        # Evaluate
+        result = evaluate_response(response_text, scenario)
         results.append(result)
+
+        status = "PASS" if result["passed"] else "FAIL"
+        print(f"  Result: {status} (score: {result['overall_score']:.2f})")
+        for issue in result.get("issues", []):
+            print(f"    - {issue}")
 
     # Summary
     print("\n" + "=" * 60)

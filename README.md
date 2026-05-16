@@ -63,7 +63,7 @@ clover-cancer/
 
 ## Author
 
-**Adhyaay Karnwal** — 15-year-old developer, Morris Hills High School
+**Adhyaay Karnwal** - Morris Hills High School (Sophomore)
 
 ## License
 

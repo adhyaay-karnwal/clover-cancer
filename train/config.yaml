@@ -1,12 +1,16 @@
 # Training Configuration for Clover Cancer
+#
+# Two training paths:
+#   1. Local (Apple Silicon MPS): python train/fine_tune.py — uses transformers+peft+trl, float16
+#   2. Kaggle (T4 GPU): notebooks/train_clover_cancer.ipynb — uses Unsloth, 4-bit quantization
+#
+# This config is the source of truth for hyperparameters used in both paths.
 
 # Model
 model:
-  name: "google/gemma-4-e2b-it"  # HuggingFace model (E2B = 2B params, fits in 24GB)
-  mlx_name: "lmstudio-community/gemma-4-E4B-it-MLX-4bit"  # MLX optimized for Apple Silicon
+  name: "google/gemma-4-e2b-it"           # HuggingFace model ID
+  unsloth_name: "unsloth/gemma-4-e2b-it"  # Unsloth pre-quantized model (for Kaggle)
   max_seq_length: 2048
-  load_in_4bit: true
-  dtype: null  # Auto-detect
 
 # LoRA
 lora:
@@ -22,30 +26,28 @@ lora:
   lora_alpha: 16
   lora_dropout: 0
   bias: "none"
-  use_gradient_checkpointing: "unsloth"
 
-# Training
+# Training hyperparameters (shared across both paths)
 training:
   output_dir: "outputs"
   num_train_epochs: 3
-  per_device_train_batch_size: 4
-  gradient_accumulation_steps: 4
+  per_device_train_batch_size: 2      # Kaggle T4 (Unsloth)
+  gradient_accumulation_steps: 8      # Effective batch = 16
   learning_rate: 0.0002
   warmup_ratio: 0.05
   lr_scheduler_type: "cosine"
-  logging_steps: 10
+  logging_steps: 5
   save_strategy: "epoch"
   eval_strategy: "epoch"
-  fp16: false
-  bf16: true
-  optim: "adamw_torch"
+  optim: "adamw_8bit"                 # Kaggle T4 (Unsloth) — falls back to adamw_torch on MPS
   max_grad_norm: 0.3
-  seed: 42
+  seed: 3407
 
 # Data
 data:
   train_file: "data/processed/train.json"
   val_file: "data/processed/val.json"
+  test_file: "data/processed/test.json"
   max_samples: null  # Use all
 
 # Output
@@ -53,3 +55,5 @@ output:
   save_model: true
   push_to_hub: false
   hub_model_id: "adhyaay-karnwal/clover-cancer-gemma4"
+  export_gguf: true
+  gguf_quantization: "q4_k_m"

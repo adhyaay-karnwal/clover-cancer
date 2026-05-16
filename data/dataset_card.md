@@ -17,25 +17,33 @@ This dataset contains structured training examples that map patient presentation
 
 ## Data Format
 
-Each example follows this structure:
+Each example is a conversation with system/user/assistant roles, formatted for chat-based fine-tuning:
 
 ```json
 {
-  "input": {
-    "symptoms": [...],
-    "age": int,
-    "risk_factors": [...],
-    "duration": "string"
-  },
-  "output": {
-    "risk_assessment": "low|medium|high|critical",
-    "conditions": [...],
-    "urgency": "self-care|routine|urgent|emergency",
-    "recommended_actions": [...],
-    "reasoning_chain": "string"
-  }
+  "conversations": [
+    {
+      "role": "system",
+      "content": "You are a medical triage AI specialized in pancreatic cancer early detection..."
+    },
+    {
+      "role": "user",
+      "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 58-year-old male..."
+    },
+    {
+      "role": "assistant",
+      "content": "{\"risk_assessment\": \"high\", \"conditions\": [...], \"urgency\": \"urgent\", ...}"
+    }
+  ]
 }
 ```
+
+The assistant response is structured JSON containing:
+- `risk_assessment`: low | medium | high | critical
+- `conditions`: ranked differential diagnoses with reasoning
+- `urgency`: self-care | routine | urgent | emergency
+- `recommended_actions`: specific diagnostic steps
+- `reasoning_chain`: clinical reasoning explanation
 
 ## Risk Levels
 
