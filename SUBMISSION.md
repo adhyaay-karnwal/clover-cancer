@@ -53,7 +53,7 @@ Step-by-step instructions for submitting Clover Cancer to the Gemma 4 Good Hacka
 - Show the model correctly identifies low risk
 
 **2:00 - 2:30 — Technical Deep-Dive**
-> "This is a fine-tuned Gemma 4 E2B model trained using Unsloth on Kaggle's free T4 GPU. 31 million trainable parameters, about 1.6% of the model. Trained on 280 examples of pancreatic cancer symptom patterns grounded in NCCN clinical guidelines."
+> "This is a fine-tuned Gemma 4 E2B model trained using Unsloth on Kaggle's free T4 GPU. 31 million trainable parameters, about 0.6% of the model. Trained on 280 examples of pancreatic cancer symptom patterns grounded in NCCN clinical guidelines."
 
 **2:30 - 3:00 — Vision**
 > "This tool democratizes clinical pattern recognition. Not everyone has access to a gastroenterologist who connects new diabetes and back pain to pancreatic cancer. Early detection saves lives."

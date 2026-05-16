@@ -6,7 +6,7 @@
 - **Base model:** google/gemma-4-e2b-it (2B parameters)
 - **Fine-tuning method:** LoRA (Low-Rank Adaptation) via PEFT
 - **LoRA rank:** 16
-- **Trainable parameters:** 31,039,488 (1.6% of total)
+- **Trainable parameters:** 31,039,488 (0.60% of total)
 - **Hardware:** Apple Silicon Mac (MPS), 24GB RAM
 - **Training framework:** PyTorch + transformers + PEFT + TRL
 
@@ -55,7 +55,7 @@ Tested on 10 clinical scenarios covering classic high-risk patterns, emergency p
 | Risk Classification | 0.80 |
 | Urgency Classification | 0.81 |
 | Clinical Term Coverage | 1.00 |
-| Reasoning Depth | 0.68 |
+| Reasoning Depth | 0.60 |
 
 ## Limitations
 

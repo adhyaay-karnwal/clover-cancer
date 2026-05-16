@@ -74,7 +74,7 @@ Medical Research (NCCN, PubMed, Frontiers)
         ↓
 Dataset Curation (350 structured examples)
         ↓
-LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 1.6% trainable)
+LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 0.6% trainable)
         ↓
 Evaluation (10 clinical test scenarios)
         ↓
@@ -83,9 +83,9 @@ Gradio Demo (interactive triage interface)
 
 ### Key Technical Decisions
 
-1. **Unsloth for Training**: Unsloth provides 1.5x faster training with 60% less VRAM than standard setups. Used on Kaggle's free T4 GPU with 4-bit quantization.
+1. **Unsloth for Training**: Unsloth provides 1.5x faster training with 60% less VRAM. Used on Kaggle's free T4 GPU with 4-bit quantization.
 
-2. **LoRA Fine-tuning**: Low-Rank Adaptation trains only 1.6% of parameters (31M of 2B), making fine-tuning feasible on consumer hardware while preserving the base model's general capabilities.
+2. **LoRA Fine-tuning**: Low-Rank Adaptation trains only 0.60% of parameters (31M of 5.2B total), making fine-tuning feasible on consumer hardware while preserving the base model's general capabilities.
 
 3. **Structured Output**: Training with JSON output format ensures consistent, parseable assessments rather than free-text responses.
 
@@ -122,9 +122,9 @@ The model was trained for 3 epochs on a Kaggle T4 GPU (7.5 minutes) and evaluate
 
 | Epoch | Training Loss | Validation Loss |
 |-------|--------------|----------------|
-| 1 | 0.3827 | 2.3884 |
-| 2 | 0.1442 | 2.2614 |
-| 3 | 0.1096 | 2.2610 |
+| 1 | 0.3829 | 2.3861 |
+| 2 | 0.1442 | 2.2595 |
+| 3 | 0.1096 | 2.2607 |
 
 - Final training loss: 0.1096
 - Final validation loss: 2.261
@@ -136,7 +136,7 @@ The model was trained for 3 epochs on a Kaggle T4 GPU (7.5 minutes) and evaluate
 | Risk Classification | 0.80 |
 | Urgency Classification | 0.81 |
 | Clinical Term Coverage | 1.00 |
-| Reasoning Depth | 0.68 |
+| Reasoning Depth | 0.60 |
 
 The gap between training and validation loss indicates some overfitting, expected given the small dataset. The model correctly identified all high-risk cancer patterns (classic triad, jaundice, BRCA2, recurrent pancreatitis, DVT) while appropriately downgrading urgency for borderline cases. The two failures were false positives on low-risk cases (mentioning cancer when it should not), which is the safer direction for a triage tool.
 
