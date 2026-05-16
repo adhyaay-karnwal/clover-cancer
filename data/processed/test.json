@@ -1,0 +1,562 @@
+[
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 63-year-old. I've been having heartburn, bloating, nausea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (heartburn, bloating, nausea), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 68-year-old. I've been having increased thirst, unexplained weight loss, fatigue for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (increased thirst, unexplained weight loss, fatigue), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 76-year-old male. My skin turned yellow but I don't have any pain. My urine is dark though. My urine has been really dark, like tea or cola colored, even when I'm drinking plenty of water. I've been losing weight without trying. Down about 15 pounds in 3 months. This has been going on for about 2-6 weeks."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"critical\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic head adenocarcinoma\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Painless jaundice with weight loss is the hallmark presentation of pancreatic head tumors causing bile duct obstruction.\"\n    },\n    {\n      \"name\": \"Ampullary carcinoma\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Periampullary tumors can present identically but have better prognosis.\"\n    },\n    {\n      \"name\": \"Cholangiocarcinoma\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Bile duct cancer can cause identical obstructive jaundice pattern.\"\n    }\n  ],\n  \"urgency\": \"emergency\",\n  \"recommended_actions\": [\n    \"Immediate abdominal CT with contrast\",\n    \"MRCP\",\n    \"ERCP if biliary obstruction confirmed\",\n    \"Urgent surgical oncology referral\",\n    \"CA 19-9\"\n  ],\n  \"reasoning_chain\": \"Painless jaundice with dark urine and weight loss is the classic presentation of a pancreatic head mass obstructing the bile duct. This is a medical emergency requiring immediate evaluation. The triad of painless jaundice + weight loss + dark urine has high specificity for periampullary malignancy.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 41-year-old. I've been having constipation, abdominal pain, bloating for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"irritable bowel syndrome\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with IBS.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (constipation, abdominal pain, bloating), the most likely diagnosis is IBS. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 41-year-old. I've been having bloating, diarrhea, abdominal pain for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"irritable bowel syndrome\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with IBS.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (bloating, diarrhea, abdominal pain), the most likely diagnosis is IBS. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 29-year-old. I've been having back pain, diabetes, abdominal pain for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"chronic pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Chronic inflammation of the pancreas.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (back pain, diabetes, abdominal pain), the most likely diagnosis is Chronic inflammation of the pancreas. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 31-year-old. I've been having steatorrhea, diabetes, abdominal pain for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"chronic pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Chronic inflammation of the pancreas.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (steatorrhea, diabetes, abdominal pain), the most likely diagnosis is Chronic inflammation of the pancreas. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 44-year-old. I've been having bloating, heartburn, nausea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (bloating, heartburn, nausea), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 68-year-old female. I've been drinking water constantly and running to the bathroom. My glucose came back really high. The night sweats are terrible. I have to change my pajamas multiple times a night. I've been experiencing abdominal discomfort. This has been going on for about 6 weeks."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"Type 2 diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Most common cause of new-onset diabetes in this age group.\"\n    },\n    {\n      \"name\": \"Pancreatic cancer (early)\",\n      \"likelihood\": \"low-moderate\",\n      \"reasoning\": \"NOD after 50 warrants monitoring for PC. Night sweats may indicate systemic disease.\"\n    },\n    {\n      \"name\": \"Lymphoma\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Night sweats are a B-symptom of lymphoma. Abdominal lymphoma can cause diabetes.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"Fasting glucose and HbA1c\",\n    \"CA 19-9\",\n    \"Abdominal ultrasound\",\n    \"Follow-up in 2-3 months\",\n    \"Consider imaging if symptoms progress\"\n  ],\n  \"reasoning_chain\": \"New-onset diabetes after 50 should prompt consideration of pancreatic cancer, even with non-specific additional symptoms. Night sweats can indicate systemic inflammatory response. While most NOD is standard Type 2, clinical follow-up is important.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 70-year-old. I've been having heartburn, bloating, nausea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (heartburn, bloating, nausea), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 31-year-old. I've been having headache, chest pain, blurred vision for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"hypertension\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with High blood pressure.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (headache, chest pain, blurred vision), the most likely diagnosis is High blood pressure. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 62-year-old male. The pain is right here in my upper belly, and it sometimes wraps around to my side. The fatigue is overwhelming. I used to be so active and now I can barely get through the day. My clothes are getting loose and I haven't changed my diet at all. This has been going on for about 2 months. My medical history includes: family history of pancreatic cancer (2+ relatives), BRCA2 mutation."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"critical\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Extremely high-risk genetic background with concerning symptoms. Immediate evaluation required.\"\n    },\n    {\n      \"name\": \"Hereditary pancreatitis\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Genetic predisposition to pancreatitis, but doesn't reduce cancer concern.\"\n    },\n    {\n      \"name\": \"Other hereditary cancers\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"BRCA2 also predisposes to breast, ovarian, prostate cancers.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Immediate MRI/MRCP\",\n    \"EUS\",\n    \"CA 19-9\",\n    \"Genetic counseling\",\n    \"Surgical oncology referral\",\n    \"Consider enrollment in screening trial\"\n  ],\n  \"reasoning_chain\": \"Individuals with \\u22652 first-degree relatives with PC and BRCA2 mutation have extremely high risk (up to 32x). NCCN recommends annual MRI/MRCP + EUS starting at age 50 (or 10 years before youngest affected relative). New symptoms in this population require immediate evaluation.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 49-year-old. I've been having heartburn, difficulty swallowing, acid reflux for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"gastroesophageal reflux disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with GERD.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (heartburn, difficulty swallowing, acid reflux), the most likely diagnosis is GERD. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 60-year-old female. I was just diagnosed with diabetes. My blood sugar has been running high and I've been really thirsty. My pancreatitis keeps coming back. My doctor is concerned about why it keeps recurring. This has been going on for about 6 months."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"high\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer with secondary pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Tumor obstructing pancreatic duct can cause recurrent pancreatitis. New-onset diabetes adds to concern. 59% of misdiagnosed PC cases were initially reported as pancreatitis.\"\n    },\n    {\n      \"name\": \"Chronic pancreatitis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Can cause recurrent episodes and new diabetes. Must be distinguished from cancer.\"\n    },\n    {\n      \"name\": \"Pancreatic divisum\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Congenital variant that can cause recurrent pancreatitis but doesn't explain new diabetes.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"CT with pancreatic protocol (during remission)\",\n    \"MRCP\",\n    \"EUS\",\n    \"CA 19-9\",\n    \"Genetic testing if family history\",\n    \"Gastroenterology referral\"\n  ],\n  \"reasoning_chain\": \"Recurrent acute pancreatitis with new-onset diabetes after age 50 is concerning for underlying pancreatic malignancy. Pancreatic cancer can cause recurrent pancreatitis by intermittently obstructing the pancreatic duct. This pattern is frequently misdiagnosed as simple recurrent pancreatitis.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 70-year-old. I've been having unexplained weight loss, increased thirst, frequent urination for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (unexplained weight loss, increased thirst, frequent urination), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 30-year-old. I've been having headache, blurred vision, chest pain for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"hypertension\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with High blood pressure.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (headache, blurred vision, chest pain), the most likely diagnosis is High blood pressure. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 49-year-old. I've been having steatorrhea, abdominal pain, weight loss for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"chronic pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Chronic inflammation of the pancreas.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (steatorrhea, abdominal pain, weight loss), the most likely diagnosis is Chronic inflammation of the pancreas. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 51-year-old male. I've been having stomach pain for weeks. It's not sharp, more like a deep ache. My skin has turned yellow and the whites of my eyes look yellow too. Everyone comments on how much weight I've lost. I haven't changed my eating habits. This has been going on for about 2 months. My medical history includes: BRCA2 mutation, family history of breast cancer."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"critical\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer (BRCA2-associated)\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"BRCA2 mutation with classic PC symptoms. May be eligible for PARP inhibitor therapy if confirmed.\"\n    },\n    {\n      \"name\": \"Cholangiocarcinoma\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Can cause similar symptoms but less strongly associated with BRCA2.\"\n    },\n    {\n      \"name\": \"Choledocholithiasis\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Can cause jaundice and pain but doesn't explain weight loss.\"\n    }\n  ],\n  \"urgency\": \"emergency\",\n  \"recommended_actions\": [\n    \"Immediate abdominal CT\",\n    \"MRCP\",\n    \"CA 19-9\",\n    \"Surgical oncology referral\",\n    \"Genetic counseling\",\n    \"Consider BRCA-targeted therapy if confirmed\"\n  ],\n  \"reasoning_chain\": \"BRCA2 mutations increase pancreatic cancer risk 3-6x. The combination of jaundice, abdominal pain, and weight loss in a BRCA2 carrier is highly concerning for pancreatic cancer. NCCN guidelines recommend genetic testing for all pancreatic cancer patients and surveillance for mutation carriers.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 79-year-old female. I've dropped almost 20 pounds since the start of the year. People keep asking if I'm okay. I can only eat small portions before feeling full. My appetite has disappeared. I get full really fast now. Even a small meal makes me feel stuffed. This has been going on for about 3 months. My medical history includes: smoking history, obesity."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Smoking doubles PC risk. Weight loss with early satiety could indicate pancreatic mass compressing stomach.\"\n    },\n    {\n      \"name\": \"Gastric cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Early satiety and weight loss are classic for gastric malignancy.\"\n    },\n    {\n      \"name\": \"Lung cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Smoking history with weight loss raises concern for lung primary.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Complete metabolic panel\",\n    \"CT chest/abdomen/pelvis\",\n    \"CA 19-9\",\n    \"Upper endoscopy\",\n    \"Colonoscopy if not recent\"\n  ],\n  \"reasoning_chain\": \"Unexplained weight loss with loss of appetite and early satiety in an older smoker warrants cancer workup. While many cancers can cause this pattern, pancreatic cancer should be considered given the smoking history. Early satiety may indicate gastric compression by a pancreatic mass.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 74-year-old male. I've been experiencing mild jaundice. My skin itches constantly, especially at night. There's no visible reason for it. I'm exhausted all the time. No matter how much I sleep, I can't shake the tiredness. This has been going on for about 3 weeks."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"high\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer (early obstructive)\",\n      \"likelihood\": \"medium-high\",\n      \"reasoning\": \"Mild jaundice with itching suggests early bile duct obstruction. May be resectable if caught now.\"\n    },\n    {\n      \"name\": \"Primary biliary cholangitis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Can cause itching and mild jaundice, typically in women.\"\n    },\n    {\n      \"name\": \"Drug-induced liver injury\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Must review medications but doesn't explain full picture.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Liver function tests\",\n    \"Abdominal ultrasound\",\n    \"CT with pancreatic protocol\",\n    \"CA 19-9\",\n    \"MRCP if ultrasound shows ductal dilation\"\n  ],\n  \"reasoning_chain\": \"Mild jaundice with pruritus (itching) can be easily overlooked, especially if bilirubin is only mildly elevated. This early obstructive pattern may be the first sign of a pancreatic head mass. Fatigue is non-specific but adds to the clinical picture. Early intervention at this stage could mean the difference between resectable and unresectable disease.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 60-year-old female. I've been experiencing abdominal pain radiating to back. I've been losing weight without trying. Down about 15 pounds in 3 months. I've been feeling really down lately. No motivation, no interest in things I used to enjoy. This has been going on for about 4 months."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"high\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"New-onset depression with weight loss and back pain in older patient is a recognized early PC pattern. Depression may be paraneoplastic.\"\n    },\n    {\n      \"name\": \"Major depressive disorder\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Depression can cause weight loss and somatic symptoms. However, new-onset depression in older adults warrants medical workup.\"\n    },\n    {\n      \"name\": \"Chronic pancreatitis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Can cause back pain and weight loss, and may be associated with depression.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Abdominal CT with pancreatic protocol\",\n    \"CA 19-9\",\n    \"Comprehensive metabolic panel\",\n    \"Psychiatric evaluation\",\n    \"Gastroenterology referral\"\n  ],\n  \"reasoning_chain\": \"New-onset depression in an older patient with abdominal pain radiating to the back and weight loss is a concerning pattern. Depression can be a paraneoplastic symptom of pancreatic cancer, often preceding the cancer diagnosis. The classic back pain radiation pattern suggests retroperitoneal involvement.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 70-year-old. I've been having blurred vision, unexplained weight loss, fatigue for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (blurred vision, unexplained weight loss, fatigue), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 52-year-old. I've been having increased thirst, unexplained weight loss, fatigue for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (increased thirst, unexplained weight loss, fatigue), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 53-year-old male. I have this dull pain in my upper abdomen that just won't quit. People keep asking if I'm okay because my skin looks yellowish. Everyone comments on how much weight I've lost. I haven't changed my eating habits. This has been going on for about 2 months. My medical history includes: BRCA2 mutation, family history of breast cancer."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"critical\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer (BRCA2-associated)\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"BRCA2 mutation with classic PC symptoms. May be eligible for PARP inhibitor therapy if confirmed.\"\n    },\n    {\n      \"name\": \"Cholangiocarcinoma\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Can cause similar symptoms but less strongly associated with BRCA2.\"\n    },\n    {\n      \"name\": \"Choledocholithiasis\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Can cause jaundice and pain but doesn't explain weight loss.\"\n    }\n  ],\n  \"urgency\": \"emergency\",\n  \"recommended_actions\": [\n    \"Immediate abdominal CT\",\n    \"MRCP\",\n    \"CA 19-9\",\n    \"Surgical oncology referral\",\n    \"Genetic counseling\",\n    \"Consider BRCA-targeted therapy if confirmed\"\n  ],\n  \"reasoning_chain\": \"BRCA2 mutations increase pancreatic cancer risk 3-6x. The combination of jaundice, abdominal pain, and weight loss in a BRCA2 carrier is highly concerning for pancreatic cancer. NCCN guidelines recommend genetic testing for all pancreatic cancer patients and surveillance for mutation carriers.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 29-year-old. I've been having nausea, abdominal pain, bloating for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (nausea, abdominal pain, bloating), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 67-year-old female. I've been drinking water constantly and running to the bathroom. My glucose came back really high. There's a constant ache in my stomach area, kind of in the middle-upper part. The fatigue is overwhelming. I used to be so active and now I can barely get through the day. This has been going on for about 3 months. My medical history includes: family history of pancreatic cancer."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"high\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Family history + NOD + abdominal pain is a high-risk constellation. Genetic predisposition (BRCA2, PALB2) combined with new metabolic changes warrants urgent evaluation.\"\n    },\n    {\n      \"name\": \"Hereditary pancreatitis\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Could explain symptoms but doesn't reduce cancer risk \\u2014 actually increases it.\"\n    },\n    {\n      \"name\": \"Peptic ulcer disease\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Abdominal pain could be ulcer-related but doesn't explain new-onset diabetes.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Abdominal MRI/MRCP\",\n    \"CA 19-9\",\n    \"Genetic counseling for BRCA/PALB2 testing\",\n    \"Consider EUS\"\n  ],\n  \"reasoning_chain\": \"New-onset diabetes in a patient with family history of pancreatic cancer and abdominal pain raises significant concern. NCCN guidelines recommend screening for individuals with \\u22652 affected first-degree relatives. The combination of NOD with family history elevates risk substantially.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 36-year-old. I've been having diarrhea, abdominal pain, bloating for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"irritable bowel syndrome\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with IBS.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (diarrhea, abdominal pain, bloating), the most likely diagnosis is IBS. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 61-year-old male. They just put me on metformin for diabetes. I'm 55 and never had this issue before. I've been experiencing mild abdominal discomfort. This has been going on for about 1 month."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"Type 2 diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Most new-onset diabetes in this age group is standard Type 2 diabetes. However, PC-associated diabetes must be considered.\"\n    },\n    {\n      \"name\": \"Pancreatic cancer (early)\",\n      \"likelihood\": \"low-moderate\",\n      \"reasoning\": \"NOD can be the earliest sign of PC, preceding other symptoms by 1-3 years. Clinical follow-up recommended.\"\n    },\n    {\n      \"name\": \"Pancreatogenic diabetes\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Could indicate underlying pancreatic pathology beyond cancer.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"Monitor symptoms closely\",\n    \"Consider CA 19-9\",\n    \"Follow up in 2-3 months if symptoms persist\",\n    \"Consider abdominal imaging if any additional symptoms develop\"\n  ],\n  \"reasoning_chain\": \"New-onset diabetes after age 50 without typical risk factors (obesity, family history of diabetes) should raise suspicion for pancreatic cancer. Studies show 0.625% of NOD patients \\u226550 are diagnosed with PC within 3 years. While most NOD patients will not develop PC, clinical vigilance is warranted.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 67-year-old. I've been having increased thirst, blurred vision, unexplained weight loss for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (increased thirst, blurred vision, unexplained weight loss), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 64-year-old female. My stools have been really greasy and foul-smelling. They float and are hard to flush. I've been losing weight without trying. Down about 15 pounds in 3 months. I've been really gassy and bloated. My abdomen feels tight and swollen. This has been going on for about 3 months."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Exocrine insufficiency with weight loss in older patient raises concern for pancreatic mass causing duct obstruction.\"\n    },\n    {\n      \"name\": \"Chronic pancreatitis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Most common cause of exocrine insufficiency. Can coexist with or predispose to cancer.\"\n    },\n    {\n      \"name\": \"Celiac disease\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Can cause steatorrhea and weight loss but typically has different age of onset pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Fecal elastase test\",\n    \"Abdominal CT with pancreatic protocol\",\n    \"CA 19-9\",\n    \"Consider EUS\",\n    \"Pancreatic enzyme replacement trial\"\n  ],\n  \"reasoning_chain\": \"Steatorrhea (fatty, pale, foul-smelling stools) indicates pancreatic enzyme insufficiency. Combined with weight loss and bloating, this suggests exocrine pancreatic dysfunction. While this can be caused by chronic pancreatitis or celiac disease, pancreatic cancer must be excluded, especially in patients >50.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 64-year-old female. I've been experiencing mild jaundice. I've been itching all over for weeks with no rash. It's driving me crazy. The fatigue is overwhelming. I used to be so active and now I can barely get through the day. This has been going on for about 3 weeks."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"high\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer (early obstructive)\",\n      \"likelihood\": \"medium-high\",\n      \"reasoning\": \"Mild jaundice with itching suggests early bile duct obstruction. May be resectable if caught now.\"\n    },\n    {\n      \"name\": \"Primary biliary cholangitis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Can cause itching and mild jaundice, typically in women.\"\n    },\n    {\n      \"name\": \"Drug-induced liver injury\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Must review medications but doesn't explain full picture.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Liver function tests\",\n    \"Abdominal ultrasound\",\n    \"CT with pancreatic protocol\",\n    \"CA 19-9\",\n    \"MRCP if ultrasound shows ductal dilation\"\n  ],\n  \"reasoning_chain\": \"Mild jaundice with pruritus (itching) can be easily overlooked, especially if bilirubin is only mildly elevated. This early obstructive pattern may be the first sign of a pancreatic head mass. Fatigue is non-specific but adds to the clinical picture. Early intervention at this stage could mean the difference between resectable and unresectable disease.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 70-year-old. I've been having increased thirst, fatigue, frequent urination for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"diabetes\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Type 2 diabetes mellitus.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (increased thirst, fatigue, frequent urination), the most likely diagnosis is Type 2 diabetes mellitus. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 52-year-old. I've been having bloating, constipation, diarrhea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"irritable bowel syndrome\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with IBS.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (bloating, constipation, diarrhea), the most likely diagnosis is IBS. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 70-year-old male. People keep asking if I'm okay because my skin looks yellowish. I've been drinking lots of water but my urine stays dark amber. I noticed my bowel movements are light-colored and they float. They look fatty. This has been going on for about 1-3 weeks."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"critical\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic head adenocarcinoma\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Most common cause of painless obstructive jaundice in elderly patients.\"\n    },\n    {\n      \"name\": \"Choledocholithiasis\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Gallstones in the common bile duct can cause identical presentation but usually with pain.\"\n    },\n    {\n      \"name\": \"Cholangiocarcinoma\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Bile duct cancer causes similar obstructive jaundice pattern.\"\n    }\n  ],\n  \"urgency\": \"emergency\",\n  \"recommended_actions\": [\n    \"Immediate abdominal ultrasound\",\n    \"CT with pancreatic protocol\",\n    \"MRCP\",\n    \"ERCP for biliary decompression\",\n    \"CA 19-9\",\n    \"Surgical oncology referral\"\n  ],\n  \"reasoning_chain\": \"Obstructive jaundice with acholic (pale) stools and pruritus indicates bile duct obstruction. In patients >60, pancreatic head carcinoma is the most common cause. Dark urine reflects conjugated hyperbilirubinemia. This requires immediate imaging and likely ERCP.\"\n}"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 33-year-old. I've been having steatorrhea, back pain, diabetes for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"chronic pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Chronic inflammation of the pancreas.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (steatorrhea, back pain, diabetes), the most likely diagnosis is Chronic inflammation of the pancreas. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  }
+]

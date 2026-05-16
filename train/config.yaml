@@ -1,0 +1,54 @@
+# Training Configuration for Clover Cancer
+
+# Model
+model:
+  name: "unsloth/gemma-4-e2b"
+  max_seq_length: 2048
+  load_in_4bit: true
+  dtype: null  # Auto-detect
+
+# LoRA
+lora:
+  r: 16
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  lora_alpha: 16
+  lora_dropout: 0
+  bias: "none"
+  use_gradient_checkpointing: "unsloth"
+
+# Training
+training:
+  output_dir: "outputs"
+  num_train_epochs: 3
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 2e-4
+  warmup_ratio: 0.05
+  lr_scheduler_type: "cosine"
+  logging_steps: 10
+  save_strategy: "epoch"
+  eval_strategy: "epoch"
+  fp16: false
+  bf16: true
+  optim: "adamw_8bit"
+  max_grad_norm: 0.3
+  seed: 42
+
+# Data
+data:
+  train_file: "data/processed/train.json"
+  val_file: "data/processed/val.json"
+  max_samples: null  # Use all
+
+# Output
+output:
+  save_model: true
+  push_to_hub: false
+  hub_model_id: "adhyaay-karnwal/clover-cancer-gemma4"

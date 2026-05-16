@@ -1,0 +1,82 @@
+[
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 31-year-old. I've been having bloating, abdominal pain, diarrhea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"irritable bowel syndrome\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with IBS.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (bloating, abdominal pain, diarrhea), the most likely diagnosis is IBS. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 43-year-old. I've been having nausea, bloating, heartburn for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (nausea, bloating, heartburn), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI specialized in pancreatic cancer early detection. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps. Always consider pancreatic cancer patterns, especially in patients over 50 with new-onset diabetes, unexplained weight loss, or jaundice. Be thorough but not alarmist \u2014 match your urgency to the clinical picture."
+      },
+      {
+        "role": "user",
+        "content": "Please assess my symptoms and tell me what might be going on:\n\nI'm a 77-year-old male. I'm eating normally but keep losing weight. It's been about 10 pounds in 2 months. I can only eat small portions before feeling full. My appetite has disappeared. I feel full after eating just a few bites. I can't finish meals anymore. This has been going on for about 3 months. My medical history includes: smoking history, obesity."
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"Pancreatic cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Smoking doubles PC risk. Weight loss with early satiety could indicate pancreatic mass compressing stomach.\"\n    },\n    {\n      \"name\": \"Gastric cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Early satiety and weight loss are classic for gastric malignancy.\"\n    },\n    {\n      \"name\": \"Lung cancer\",\n      \"likelihood\": \"medium\",\n      \"reasoning\": \"Smoking history with weight loss raises concern for lung primary.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"Complete metabolic panel\",\n    \"CT chest/abdomen/pelvis\",\n    \"CA 19-9\",\n    \"Upper endoscopy\",\n    \"Colonoscopy if not recent\"\n  ],\n  \"reasoning_chain\": \"Unexplained weight loss with loss of appetite and early satiety in an older smoker warrants cancer workup. While many cancers can cause this pattern, pancreatic cancer should be considered given the smoking history. Early satiety may indicate gastric compression by a pancreatic mass.\"\n}"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 53-year-old. I've been having abdominal pain, steatorrhea, back pain for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"medium\",\n  \"conditions\": [\n    {\n      \"name\": \"chronic pancreatitis\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Chronic inflammation of the pancreas.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"urgent\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (abdominal pain, steatorrhea, back pain), the most likely diagnosis is Chronic inflammation of the pancreas. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a medical triage AI. Analyze the patient presentation and provide a structured assessment including risk level, possible conditions with reasoning, urgency classification, and recommended next steps."
+      },
+      {
+        "role": "user",
+        "content": "I'm a 59-year-old. I've been having heartburn, abdominal pain, nausea for a few weeks. What could this be?"
+      },
+      {
+        "role": "assistant",
+        "content": "{\n  \"risk_assessment\": \"low\",\n  \"conditions\": [\n    {\n      \"name\": \"peptic ulcer disease\",\n      \"likelihood\": \"high\",\n      \"reasoning\": \"Symptoms are consistent with Stomach or duodenal ulcers.\"\n    },\n    {\n      \"name\": \"Other differential\",\n      \"likelihood\": \"low\",\n      \"reasoning\": \"Other conditions less likely given symptom pattern.\"\n    }\n  ],\n  \"urgency\": \"routine\",\n  \"recommended_actions\": [\n    \"See primary care physician\",\n    \"Basic blood work\",\n    \"Follow up in 2 weeks\"\n  ],\n  \"reasoning_chain\": \"Based on the symptom pattern described (heartburn, abdominal pain, nausea), the most likely diagnosis is Stomach or duodenal ulcers. This is a common condition that should be evaluated by a healthcare provider.\"\n}"
+      }
+    ]
+  }
+]
