@@ -49,7 +49,7 @@ I built a model that tries to catch these patterns earlier."
 **Narrator:**
 "Under the hood this is Gemma 4 E2B, a 2 billion parameter model that is Apache 2.0 licensed. My project code is MIT. The reason Gemma works well here is that it already understands a lot about medicine and clinical reasoning from pre-training. Fine-tuning takes that general knowledge and focuses it on one specific thing, which is pancreatic cancer pattern recognition.
 
-I used LoRA, which only trains about 0.6% of the model's parameters, or 31 million out of 5.2 billion. That is why the entire fine-tuning runs on a free Kaggle T4 GPU in about 8 minutes.
+I used LoRA, which only trains about 0.6% of the total parameters, or 31 million out of 5.2 billion including embeddings. That is why the entire fine-tuning runs on a free Kaggle T4 GPU in about 8 minutes.
 
 **[Optional cut: training loss graph]**
 

@@ -33,7 +33,7 @@ Medical Research (NCCN, PubMed, Frontiers)
         ↓
 Dataset Curation (350 structured examples)
         ↓
-LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 0.6% trainable)
+LoRA Fine-tuning (Unsloth on Kaggle T4, rank 16, 0.6% of total)
         ↓
 Challenges: tokenizer alignment, multimodal format, MPS compatibility
         ↓

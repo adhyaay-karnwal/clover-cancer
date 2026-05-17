@@ -32,7 +32,7 @@ A fine-tuned Gemma 4 E2B model trained on pancreatic cancer symptom patterns, ri
 |--------|-------|
 | Base Model | Gemma 4 E2B (2B params) |
 | Training Method | LoRA (r=16, alpha=16) via Unsloth |
-| Trainable Parameters | 31M (0.60%) |
+| Trainable Parameters | 31M (0.60% of total, 5.2B including embeddings) |
 | Training Data | 280 training (of 350 total) |
 | Training Time | 7.5 min (3 epochs on Kaggle T4) |
 | Final Training Loss | 0.1096 |
