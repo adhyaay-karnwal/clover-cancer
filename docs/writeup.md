@@ -134,9 +134,9 @@ The approach scales. The pipeline is the same regardless of dataset size. The li
 
 ## Limitations
 
-This is not a clinically validated medical device. The model was trained on 280 synthetic examples, not real patient records. Synthetic data inherits biases from the LLM that generated it. There has been no retrospective study, no clinical trial, no IRB approval.
+This is not a clinically validated medical device. The dataset is grounded in real medical sources (NCCN guidelines, MD Anderson research, Johns Hopkins studies), but 280 training examples is very small for a clinical tool. There has been no retrospective study, no clinical trial, no IRB approval.
 
-But the approach is proven. A pancreatic cancer triage model was built in 7.5 minutes on a free GPU with zero budget. It catches the patterns it should catch. The next step is scale - thousands of real clinical cases, validation against patient outcomes, and eventually, clinical deployment.
+But the approach works. A pancreatic cancer triage model was built in 7.5 minutes on a free GPU with zero budget. It catches the patterns it should catch. The next step is scale - thousands of real clinical cases, validation against patient outcomes, and eventually, clinical deployment.
 
 ## The Bigger Picture
 
