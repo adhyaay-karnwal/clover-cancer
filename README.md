@@ -6,6 +6,7 @@
 [![Training Data](https://img.shields.io/badge/Kaggle-Training%20Dataset-green)](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data)
 [![LoRA Weights](https://img.shields.io/badge/Kaggle-LoRA%20Weights-orange)](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora)
 [![Training Notebook](https://img.shields.io/badge/Kaggle-Training%20Notebook-red)](https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning)
+[![Submission Writeup](https://img.shields.io/badge/Kaggle-Submission%20Writeup-purple)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/clover-cancer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Clover Cancer](clover-banner.png)
@@ -138,6 +139,7 @@ Structured Output (JSON)
 | **Training Dataset** | 350 structured conversation examples (train/val/test) | [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-data) |
 | **LoRA Adapter Weights** | Fine-tuned Gemma 4 E2B weights (119MB) | [kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora) |
 | **Training Notebook** | Kaggle T4 GPU training pipeline with Unsloth | [kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning](https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning) |
+| **Submission Writeup** | Official hackathon submission writeup | [kaggle.com/competitions/gemma-4-good-hackathon/writeups/clover-cancer](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/clover-cancer) |
 
 ## Repository Structure
 
