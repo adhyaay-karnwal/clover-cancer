@@ -2,42 +2,31 @@
 
 ## Motivation
 
-Pancreatic cancer is the deadliest major cancer. The 5-year survival rate is just 12% - the lowest of all major cancers. But when caught at Stage 1, survival jumps to 44%. The difference is timing.
+Pancreatic cancer is the deadliest major cancer, with a 5-year survival rate of just 12%, the lowest of all major cancers. But when caught at Stage 1, survival jumps to 44%. The difference is timing.
 
-The challenge is that early symptoms are vague: back pain, new-onset diabetes, weight loss, fatigue. Each on its own is easily dismissed. By the time symptoms become obvious - jaundice, severe pain, dramatic weight loss - the window for curative surgery has usually closed.
+The challenge is that early symptoms are vague. Back pain, new-onset diabetes, weight loss, fatigue. Each on its own is easily dismissed. By the time symptoms become obvious, like jaundice or severe pain, the window for curative surgery has usually closed.
 
-A general-purpose LLM can talk about pancreatic cancer, but it won't consistently recognize subtle symptom clusters as high-risk, or provide structured, auditable assessments. I wanted to see if fine-tuning could close that gap - teaching a model to reason through differential diagnoses the way a clinician would, rather than just reciting facts.
+A general-purpose LLM can talk about pancreatic cancer, but it won't consistently recognize subtle symptom clusters as high-risk or provide structured, auditable assessments. I wanted to see if fine-tuning could teach a model to reason through differential diagnoses the way a clinician would, rather than just reciting facts.
 
 ## Solution Approach
 
-Gemma 4 E2B represents a sweet spot for this kind of task. At 2 billion parameters, it's small enough to run on consumer hardware - my MacBook with 24GB of unified memory handles inference without issue. But it's large enough that its pre-training provides a strong foundation in medical knowledge and general reasoning. The key insight is that foundation models already understand a lot about the world. What fine-tuning does is specialize that knowledge toward a specific use case. Instead of knowing broadly about "cancer symptoms," the model learns to recognize the specific patterns that warrant investigation - and more importantly, to distinguish them from benign conditions that look similar.
+Gemma 4 E2B sits at a sweet spot for this kind of task. At 2 billion parameters, it is small enough to run on consumer hardware like my MacBook with 24GB of unified memory, but large enough that its pre-training provides a strong foundation in medical knowledge and general reasoning. The key insight is that foundation models already understand a lot about the world, and fine-tuning specializes that knowledge toward a specific use case. Instead of knowing broadly about cancer symptoms, the model learns to recognize the specific patterns that warrant investigation and, more importantly, distinguish them from benign conditions that look similar.
 
-My goal extended beyond creating a demo: I wanted to build something that could actually catch patterns that get missed in clinical practice. Convenience matters here - if the tool isn't easy to use, it doesn't matter how accurate it is. That's why the output is structured JSON with specific next steps rather than free text. The user doesn't need to interpret a paragraph - they get risk level, urgency, possible conditions, and recommended actions.
+My goal extended beyond creating a demo. I wanted to build something that could actually catch patterns that get missed in clinical practice. That is why the output is structured JSON with specific next steps rather than free text. The user gets risk level, urgency, possible conditions, and recommended actions without having to interpret a paragraph.
 
 ### Why Fine-tuning, Not Just Prompting
 
-A base Gemma 4 can discuss pancreatic cancer knowledgeably. But without fine-tuning, it won't consistently:
-
-- Recognize that new-onset diabetes at 58 + unexplained weight loss + back pain is a high-risk pattern
-- Provide structured, parseable assessments rather than narrative text
-- Match urgency to clinical severity appropriately
-- Recommend specific diagnostic pathways (CT with pancreatic protocol, CA 19-9, EUS)
-
-Fine-tuning teaches the model to think in a structured way - not just what to say, but how to say it, and when to escalate.
+A base Gemma 4 can discuss pancreatic cancer knowledgeably, but without fine-tuning it won't consistently recognize that new-onset diabetes at 58 combined with unexplained weight loss and back pain is a high-risk pattern. It won't provide structured, parseable assessments or recommend specific diagnostic pathways like a CT with pancreatic protocol or a CA 19-9 test. Fine-tuning teaches the model to think in a structured way, not just what to say but how to say it and when to escalate.
 
 ## Development Process
 
 ### Model Selection
 
-I chose Gemma 4 E2B over larger models (like 7B or 27B) for a few reasons:
-
-- **Hardware constraints**: At 2B parameters, the 4-bit quantized version fits in about 1.5GB of VRAM. This means it runs on a free Kaggle T4 (16GB) with plenty of headroom, and also runs on my MacBook's MPS backend for local inference.
-- **Apache 2.0 license**: Fully open for research and modification.
-- **Reasoning capability**: Despite its size, Gemma 4's pre-training provides solid medical knowledge. The model already understands concepts like differential diagnosis, risk stratification, and clinical guidelines - it just needs to be taught how to apply them consistently.
+I chose Gemma 4 E2B over larger models for a few reasons. At 2B parameters, the 4-bit quantized version fits in about 1.5GB of VRAM, meaning it runs on a free Kaggle T4 with plenty of headroom and also runs on my MacBook's MPS backend for local inference. It is Apache 2.0 licensed, fully open for research and modification. And despite its size, Gemma 4's pre-training provides solid medical knowledge. The model already understands concepts like differential diagnosis, risk stratification, and clinical guidelines. It just needs to be taught how to apply them consistently.
 
 ### Training Pipeline
 
-The training was done on Kaggle's free T4 GPU using Unsloth for efficient LoRA fine-tuning:
+The training was done on Kaggle's free T4 GPU using Unsloth for efficient LoRA fine-tuning.
 
 ```
 Medical Research (NCCN, PubMed, Frontiers)
@@ -53,17 +42,17 @@ Evaluation (10 clinical test scenarios)
 Gradio Demo (interactive triage interface)
 ```
 
-I had minimal resources: a MacBook for development and testing, and a few hours of free Kaggle GPU credits for training. The entire project cost nothing to build.
+I had minimal resources. A MacBook for development and testing, and a few hours of free Kaggle GPU credits for training. The entire project cost nothing to build.
 
 ### Challenges I Faced
 
 **Token alignment during fine-tuning**
 
-When I first ran training on the notebook, the tokenizer's PAD/BOS/EOS tokens didn't match what the model expected. The tokenizer had custom token values that differed from the model config and generation config. I had to sync all three - updating the model config and generation config with the tokenizer's values (including setting bos_token_id to 2). Without this alignment, the model would generate incoherent output because it was decoding with mismatched special tokens.
+When I first ran training, the tokenizer's PAD, BOS, and EOS tokens didn't match what the model expected. The tokenizer had custom token values that differed from the model config and generation config. I had to sync all three by updating the model config and generation config with the tokenizer's values, including setting bos_token_id to 2. Without this alignment, the model would generate incoherent output because it was decoding with mismatched special tokens.
 
 **Gemma 4 multimodal content format**
 
-The Gemma 4 processor expects content in a specific multimodal format: `[{"type": "text", "text": "..."}]` rather than plain strings. This wasn't immediately obvious from the documentation. The initial training code passed plain strings to `apply_chat_template`, which worked for the template but caused subtle issues during generation. Switching to explicit content blocks resolved this.
+The Gemma 4 processor expects content in a specific multimodal format using `[{"type": "text", "text": "..."}]` rather than plain strings. This wasn't immediately obvious from the documentation. The initial training code passed plain strings to `apply_chat_template`, which worked for the template but caused subtle issues during generation. Switching to explicit content blocks resolved this.
 
 **MPS compatibility for local inference**
 
@@ -79,11 +68,7 @@ The model generates JSON wrapped in natural language, so parsing the structured 
 
 ### Dataset
 
-The training data consists of 350 structured conversation examples (280 train, 35 val, 35 test):
-
-- **152 pancreatic cancer patterns**: symptom clusters, risk factors, and differential diagnoses covering a range of presentations from early-stage to emergency
-- **198 general medical examples**: common conditions that could be confused with pancreatic cancer, preventing the model from developing a "when in doubt, say cancer" bias
-- **Sources**: NCCN clinical practice guidelines, Chari et al. (MD Anderson) on new-onset diabetes as early predictor, Johns Hopkins CT study on missed PC signs, and the Frontiers 2025 comprehensive review
+The training data consists of 350 structured conversation examples, with 280 for training, 35 for validation, and 35 for testing. There are 152 pancreatic cancer patterns covering symptom clusters, risk factors, and differential diagnoses, and 198 general medical examples to prevent the model from developing a bias toward always saying cancer. The sources are NCCN clinical practice guidelines, Chari et al. (MD Anderson) on new-onset diabetes as an early predictor, the Johns Hopkins CT study on missed PC signs, and the Frontiers 2025 comprehensive review.
 
 | Category | Examples | Risk Level |
 |----------|----------|------------|
@@ -105,7 +90,7 @@ Three epochs on a Kaggle T4, about 7.5 minutes of training. Evaluated on 10 held
 | 2 | 0.1442 | 2.2595 |
 | 3 | 0.1096 | 2.2607 |
 
-The training loss drops cleanly through all three epochs, but the validation loss plateaus after epoch 1. This is the expected pattern for a small dataset - the model memorizes the training patterns rather than learning deeper generalizations. More data would directly address this.
+The training loss drops cleanly through all three epochs, but the validation loss plateaus after epoch 1. This is the expected pattern for a small dataset where the model memorizes the training patterns rather than learning deeper generalizations, and more data would directly address this.
 
 ### Evaluation Results
 
@@ -117,34 +102,28 @@ The training loss drops cleanly through all three epochs, but the validation los
 | Clinical Term Coverage | 1.00 |
 | Reasoning Depth | 0.60 |
 
-The model caught every high-risk pattern I tested: the classic new-diabetes-weight-loss-back-pain triad, painless jaundice, BRCA2 carriers with symptoms, recurrent pancreatitis, and Trousseau syndrome (DVT with abdominal symptoms). The two failures were both on low-risk cases where the model mentioned pancreatic cancer when it shouldn't have. For a triage tool, this is the safer direction to be wrong.
+The model caught every high-risk pattern I tested, including the classic new-diabetes-weight-loss-back-pain triad, painless jaundice, BRCA2 carriers with symptoms, recurrent pancreatitis, and Trousseau syndrome with DVT and abdominal symptoms. The two failures were both on low-risk cases where the model mentioned pancreatic cancer when it should not have. For a triage tool, this is the safer direction to be wrong.
 
-The reasoning depth score is the weakest at 0.60. The model gives accurate assessments but often with short reasoning chains. This reflects the training data - 280 examples doesn't give the model enough varied examples of detailed clinical reasoning. Expanding the dataset with longer, more thorough reasoning examples would likely improve this.
+The reasoning depth score is the weakest at 0.60. The model gives accurate assessments but often with short reasoning chains, which reflects the training data. With only 280 examples, the model does not have enough varied examples of detailed clinical reasoning. Expanding the dataset with longer, more thorough reasoning examples would likely improve this.
 
 ### What More Training Would Enable
 
-With 280 examples, the model learns broad pattern categories. With 2,800 examples - real clinical cases from electronic health records, curated by oncologists - the model could learn:
-
-- **Calibration**: Better confidence estimation for borderline cases
-- **Edge cases**: Rarer presentations that currently aren't covered
-- **Nuance**: Distinguishing between similar presentations with different underlying causes
-- **Reduced false positives**: Learning finer-grained distinctions so low-risk cases don't get over-escalated
-
-The approach scales. The pipeline is the same regardless of dataset size. The limiting factor isn't the model or the technique - it's access to high-quality clinical data.
+With 280 examples, the model learns broad pattern categories. With 2,800 examples sourced from real clinical cases curated by oncologists, the model could learn better confidence estimation for borderline cases, handle rarer presentations, distinguish between similar presentations with different underlying causes, and reduce false positives on low-risk cases. The pipeline scales regardless of dataset size. The limiting factor is access to high-quality clinical data.
 
 ## Limitations
 
-This is not a clinically validated medical device. The dataset is grounded in real medical sources (NCCN guidelines, MD Anderson research, Johns Hopkins studies), but 280 training examples is very small for a clinical tool. There has been no retrospective study, no clinical trial, no IRB approval.
+This is not a clinically validated medical device. The dataset is grounded in real medical sources like NCCN guidelines, MD Anderson research, and Johns Hopkins studies, but 280 training examples is very small for a clinical tool. There has been no retrospective study, no clinical trial, no IRB approval.
 
-But the approach works. A pancreatic cancer triage model was built in 7.5 minutes on a free GPU with zero budget. It catches the patterns it should catch. The next step is scale - thousands of real clinical cases, validation against patient outcomes, and eventually, clinical deployment.
+But the approach works. A pancreatic cancer triage model was built in 7.5 minutes on a free GPU with zero budget, and it catches the patterns it should catch. The next step is scaling to thousands of real clinical cases with validation against patient outcomes.
 
 ## The Bigger Picture
 
 Five years ago, building a specialized medical triage model would have required a hospital IT department and a significant research budget. Today, it took a high schooler with a laptop, a Kaggle account, and a willingness to try.
 
-Gemma 4 is Apache 2.0 licensed. My project code is MIT. Unsloth is open source. Kaggle provides free GPU time. The barriers aren't technical anymore. What's needed is the will to apply these tools to problems that matter.
+Pancreatic cancer kills 137 Americans every day. Most are diagnosed too late because the symptoms are easy to dismiss. If this rough prototype helps even one person catch a pattern that would have been missed, then it matters.
+
+Gemma 4 is Apache 2.0 licensed, my project code is MIT, Unsloth is open source, and Kaggle provides free GPU time. This is what open models make possible. A high schooler with a laptop can now build something that once required a hospital system and a million dollar budget. The next version will train on thousands of real clinical cases, validated by people who save lives every day. But you have to start somewhere. This is where I started.
 
 ## Author
 
 **Adhyaay Karnwal** - Sophomore, Morris Hills High School
-
