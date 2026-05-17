@@ -58,10 +58,12 @@ def _detect_device():
 def _has_unsloth():
     """Check if Unsloth is available."""
     try:
-        import unsloth
         import torch
-        return torch.cuda.is_available()
-    except (ImportError, AttributeError):
+        if not torch.cuda.is_available():
+            return False
+        import unsloth
+        return True
+    except Exception:
         return False
 
 
@@ -104,7 +106,6 @@ class PancreaticCancerTriage:
             )
 
             self.model = PeftModel.from_pretrained(self.model, path)
-            self.model = self.model.merge_and_unload()
 
             self._loaded = True
             print("Model loaded with Unsloth backend.")
@@ -143,7 +144,7 @@ class PancreaticCancerTriage:
             print("Loading base model (this may take a few minutes)...")
             self.model = AutoModelForCausalLM.from_pretrained(
                 base_model_name,
-                torch_dtype=dtype,
+                dtype=dtype,
                 device_map="auto" if self._device != "mps" else None,
                 trust_remote_code=True,
                 low_cpu_mem_usage=True,
@@ -155,8 +156,18 @@ class PancreaticCancerTriage:
             # Apply LoRA adapters
             print("Applying LoRA adapters...")
             from peft import PeftModel
-            self.model = PeftModel.from_pretrained(self.model, path)
-            self.model = self.model.merge_and_unload()
+            import json
+
+            # Restrict adapters to language model layers (excludes vision/audio encoders)
+            with open(f"{path}/adapter_config.json") as f:
+                adapter_config_dict = json.load(f)
+            adapter_config_dict["target_modules"] = (
+                r".*language_model\.(layers|embed_tokens).*(q_proj|k_proj|v_proj|o_proj|"
+                r"gate_proj|up_proj|down_proj)"
+            )
+            from peft import LoraConfig
+            peft_config = LoraConfig(**adapter_config_dict)
+            self.model = PeftModel.from_pretrained(self.model, path, config=peft_config)
 
             self.model.eval()
             self._loaded = True
@@ -190,14 +201,14 @@ class PancreaticCancerTriage:
             )
 
             # Move to correct device
-            if self._device == "mps":
-                inputs = {k: v.to("mps") for k, v in inputs.items()}
-            elif self._device == "cuda":
-                inputs = {k: v.to("cuda") for k, v in inputs.items()}
+            if isinstance(inputs, torch.Tensor):
+                input_ids = inputs.to(self._device)
+            else:
+                input_ids = inputs["input_ids"].to(self._device)
 
             with torch.no_grad():
                 outputs = self.model.generate(
-                    **inputs,
+                    input_ids=input_ids,
                     max_new_tokens=1024,
                     temperature=0.3,
                     top_p=0.9,
@@ -207,7 +218,7 @@ class PancreaticCancerTriage:
 
             # Decode only the new tokens
             raw_response = self.tokenizer.decode(
-                outputs[0][inputs["input_ids"].shape[1]:],
+                outputs[0][input_ids.shape[1]:],
                 skip_special_tokens=True
             )
 
