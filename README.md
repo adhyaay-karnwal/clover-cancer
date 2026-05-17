@@ -1,4 +1,4 @@
-# Clover Cancer
+# Clover Cancer: Cancer research is costly. Gemma 4 is not.
 
 **Pancreatic Cancer Early Detection with Fine-tuned Gemma 4**
 
@@ -7,6 +7,8 @@
 [![LoRA Weights](https://img.shields.io/badge/Kaggle-LoRA%20Weights-orange)](https://www.kaggle.com/datasets/adhyaaykarnwal/clover-cancer-lora)
 [![Training Notebook](https://img.shields.io/badge/Kaggle-Training%20Notebook-red)](https://www.kaggle.com/code/adhyaaykarnwal/clover-cancer-gemma-4-fine-tuning)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+![Clover Cancer](banner.png)
 
 ## The Problem
 
